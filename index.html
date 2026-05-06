@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Computer Solution — Adajan, Surat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #000000;
+  --white: #ffffff;
+  --gray-1: #f5f5f5;
+  --gray-2: #a1a1a6;
+  --gray-3: #48484a;
+  --gray-4: #1c1c1e;
+  --gray-5: #0a0a0a;
+  --accent: #2997ff;
+  --accent-dim: rgba(41,151,255,0.15);
+  --glass-bg: rgba(255,255,255,0.04);
+  --glass-border: rgba(255,255,255,0.08);
+  --glass-hover: rgba(255,255,255,0.07);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: 'Inter', -apple-system, sans-serif;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ── CUSTOM CURSOR ── */
+#cursor {
+  width: 10px; height: 10px;
+  background: var(--white);
+  border-radius: 50%;
+  position: fixed; top: 0; left: 0;
+  pointer-events: none; z-index: 9999;
+  transform: translate(-50%,-50%);
+  transition: transform 0.08s, width 0.25s, height 0.25s, background 0.25s;
+}
+#cursor-ring {
+  width: 36px; height: 36px;
+  border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 50%;
+  position: fixed; top: 0; left: 0;
+  pointer-events: none; z-index: 9998;
+  transform: translate(-50%,-50%);
+  transition: transform 0.18s ease-out, width 0.3s, height 0.3s, border-color 0.3s;
+}
+body:has(a:hover) #cursor, body:has(button:hover) #cursor { width:6px; height:6px; }
+body:has(a:hover) #cursor-ring, body:has(button:hover) #cursor-ring {
+  width:60px; height:60px; border-color: rgba(41,151,255,0.6);
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  height: 52px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 48px;
+  background: rgba(0,0,0,0);
+  transition: background 0.4s, border-color 0.4s;
+  border-bottom: 0.5px solid transparent;
+}
+nav.scrolled {
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: saturate(180%) blur(24px);
+  -webkit-backdrop-filter: saturate(180%) blur(24px);
+  border-bottom-color: var(--glass-border);
+}
+.nav-logo {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800; font-size: 15px;
+  letter-spacing: -0.5px; color: var(--white);
+}
+.nav-links { display: flex; gap: 28px; }
+.nav-links a {
+  font-size: 12px; color: var(--gray-2);
+  text-decoration: none; letter-spacing: 0.02em;
+  transition: color 0.2s; cursor: none;
+}
+.nav-links a:hover { color: var(--white); }
+.nav-right { display: flex; gap: 16px; align-items: center; }
+.nav-cart {
+  font-size: 12px; color: var(--gray-2);
+  cursor: none; transition: color 0.2s;
+}
+.nav-cart:hover { color: var(--white); }
+.btn-nav {
+  font-size: 12px; font-weight: 500;
+  background: var(--white); color: var(--black);
+  border: none; border-radius: 980px;
+  padding: 7px 18px; cursor: none;
+  transition: background 0.2s, transform 0.15s;
+  font-family: 'Inter', sans-serif;
+}
+.btn-nav:hover { background: var(--gray-1); transform: scale(1.02); }
+
+/* ── HERO ── */
+.hero {
+  height: 100vh;
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+#hero-canvas {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  z-index: 1;
+}
+.hero-vignette {
+  position: absolute; inset: 0; z-index: 2;
+  background: radial-gradient(ellipse 80% 70% at 50% 60%, transparent 30%, rgba(0,0,0,0.7) 100%);
+  pointer-events: none;
+}
+.hero-content {
+  position: relative; z-index: 3;
+  text-align: center;
+  pointer-events: none;
+}
+.hero-tag {
+  display: inline-block;
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-dim);
+  border: 0.5px solid rgba(41,151,255,0.3);
+  border-radius: 980px; padding: 5px 16px;
+  margin-bottom: 28px;
+  opacity: 0; animation: fadeUp 1s 0.3s forwards;
+}
+.hero-h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(52px, 8vw, 104px);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -3px;
+  color: var(--white);
+  margin-bottom: 24px;
+  opacity: 0; animation: fadeUp 1s 0.5s forwards;
+}
+.hero-h1 em {
+  font-style: normal;
+  color: var(--gray-2);
+}
+.hero-sub {
+  font-size: 17px; font-weight: 300;
+  color: var(--gray-2); line-height: 1.6;
+  max-width: 420px; margin: 0 auto 40px;
+  letter-spacing: -0.2px;
+  opacity: 0; animation: fadeUp 1s 0.7s forwards;
+}
+.hero-ctas {
+  display: flex; gap: 12px; justify-content: center;
+  pointer-events: all;
+  opacity: 0; animation: fadeUp 1s 0.9s forwards;
+}
+.btn-primary {
+  font-family: 'Inter', sans-serif;
+  font-size: 15px; font-weight: 500;
+  background: var(--white); color: var(--black);
+  border: none; border-radius: 980px;
+  padding: 14px 28px; cursor: none;
+  transition: transform 0.2s, background 0.2s;
+}
+.btn-primary:hover { background: var(--gray-1); transform: scale(1.03); }
+.btn-outline {
+  font-family: 'Inter', sans-serif;
+  font-size: 15px; font-weight: 400;
+  background: transparent; color: var(--white);
+  border: 0.5px solid var(--glass-border);
+  border-radius: 980px; padding: 14px 28px; cursor: none;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+  backdrop-filter: blur(10px);
+}
+.btn-outline:hover {
+  background: var(--glass-bg); border-color: rgba(255,255,255,0.2);
+  transform: scale(1.03);
+}
+.hero-hint {
+  position: absolute; bottom: 36px; left: 50%;
+  transform: translateX(-50%); z-index: 3;
+  font-size: 11px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--gray-3);
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  opacity: 0; animation: fadeIn 1s 1.4s forwards;
+}
+.hero-hint-line {
+  width: 1px; height: 40px;
+  background: linear-gradient(to bottom, var(--gray-3), transparent);
+  animation: pulse 2s infinite;
+}
+
+/* ── STATS ── */
+.stats-strip {
+  display: flex; border-top: 0.5px solid var(--glass-border);
+  border-bottom: 0.5px solid var(--glass-border);
+}
+.stat {
+  flex: 1; padding: 40px 20px; text-align: center;
+  border-right: 0.5px solid var(--glass-border);
+  position: relative; overflow: hidden;
+}
+.stat::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: var(--glass-bg);
+  transform: scaleY(0); transform-origin: bottom;
+  transition: transform 0.4s;
+}
+.stat:hover::before { transform: scaleY(1); }
+.stat:last-child { border-right: none; }
+.stat-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 44px; font-weight: 800;
+  letter-spacing: -2px; color: var(--white);
+  line-height: 1; margin-bottom: 6px;
+}
+.stat-label { font-size: 12px; color: var(--gray-2); letter-spacing: 0.05em; }
+
+/* ── SECTION BASE ── */
+.section {
+  padding: 120px 48px;
+  max-width: 1200px; margin: 0 auto;
+}
+.section-full { padding: 120px 48px; }
+.eyebrow {
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 16px;
+}
+.section-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 800; letter-spacing: -2px;
+  line-height: 1.0; margin-bottom: 20px;
+}
+.section-sub {
+  font-size: 17px; font-weight: 300;
+  color: var(--gray-2); line-height: 1.6;
+  max-width: 500px; letter-spacing: -0.2px;
+}
+
+/* ── SERVICES — GLASS ── */
+.services-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 1.5px;
+  background: var(--glass-border);
+  border-radius: 24px; overflow: hidden;
+  margin-top: 56px;
+}
+.svc-card {
+  background: var(--gray-5);
+  padding: 40px 36px;
+  position: relative; overflow: hidden;
+  cursor: none;
+  transition: background 0.3s;
+}
+.svc-card.span2 { grid-column: span 2; }
+.svc-card::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(41,151,255,0.05), transparent 60%);
+  opacity: 0; transition: opacity 0.4s;
+  pointer-events: none;
+}
+.svc-card:hover { background: #111; }
+.svc-card:hover::after { opacity: 1; }
+.svc-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.15em; color: var(--gray-3);
+  margin-bottom: 32px;
+}
+.svc-icon-line {
+  width: 32px; height: 1.5px;
+  background: var(--accent); margin-bottom: 20px;
+  transition: width 0.3s;
+}
+.svc-card:hover .svc-icon-line { width: 56px; }
+.svc-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px; font-weight: 800;
+  letter-spacing: -0.5px; color: var(--white);
+  margin-bottom: 10px;
+}
+.svc-desc {
+  font-size: 14px; font-weight: 300;
+  color: var(--gray-2); line-height: 1.6;
+  max-width: 340px;
+}
+.svc-price {
+  margin-top: 20px; font-size: 13px;
+  color: var(--gray-2); font-weight: 400;
+}
+.svc-cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-top: 24px; font-size: 13px;
+  color: var(--accent); font-weight: 500;
+  background: none; border: none; cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: gap 0.2s;
+  padding: 0;
+  position: relative; z-index: 2;
+}
+.svc-card:hover .svc-cta { gap: 14px; }
+.svc-arrow {
+  width: 18px; height: 18px;
+  border: 1px solid var(--accent);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ── PC BUILDER ── */
+.builder-wrap {
+  background: var(--gray-5);
+  border-top: 0.5px solid var(--glass-border);
+  border-bottom: 0.5px solid var(--glass-border);
+  padding: 100px 48px;
+}
+.builder-inner { max-width: 1000px; margin: 0 auto; }
+.builder-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 12px; margin-top: 56px;
+}
+.part-block {
+  background: var(--glass-bg);
+  border: 0.5px solid var(--glass-border);
+  border-radius: 16px; padding: 24px;
+  transition: border-color 0.2s, background 0.2s;
+  cursor: none;
+}
+.part-block:hover {
+  border-color: rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.06);
+}
+.part-block:focus-within {
+  border-color: rgba(41,151,255,0.5);
+  background: rgba(41,151,255,0.04);
+}
+.part-label {
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--gray-3); margin-bottom: 10px;
+}
+.part-select {
+  background: transparent; border: none;
+  color: var(--white); font-size: 15px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400; width: 100%; outline: none;
+  cursor: none; appearance: none;
+  -webkit-appearance: none;
+}
+.part-select option { background: #111; color: var(--white); }
+.builder-total-block {
+  margin-top: 16px;
+  background: linear-gradient(135deg, rgba(41,151,255,0.1), rgba(41,151,255,0.03));
+  border: 0.5px solid rgba(41,151,255,0.25);
+  border-radius: 20px; padding: 32px 36px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.total-lbl {
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--gray-2); margin-bottom: 8px;
+}
+.total-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 48px; font-weight: 800;
+  letter-spacing: -2px; color: var(--white);
+  line-height: 1;
+}
+.total-note {
+  font-size: 12px; color: var(--gray-3);
+  margin-top: 6px;
+}
+.btn-build {
+  background: var(--accent); color: var(--white);
+  border: none; border-radius: 980px;
+  padding: 16px 36px; font-size: 15px;
+  font-weight: 500; cursor: none;
+  font-family: 'Inter', sans-serif;
+  transition: transform 0.2s, background 0.2s;
+  white-space: nowrap;
+}
+.btn-build:hover { background: #1a8aff; transform: scale(1.03); }
+
+/* ── SHOP ── */
+.shop-header {
+  display: flex; align-items: flex-end;
+  justify-content: space-between; margin-bottom: 48px;
+}
+.shop-link {
+  font-size: 13px; color: var(--accent);
+  text-decoration: none; cursor: none;
+  transition: opacity 0.2s;
+}
+.shop-link:hover { opacity: 0.7; }
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.5px;
+  background: var(--glass-border);
+  border-radius: 24px; overflow: hidden;
+}
+.prod-tile {
+  background: var(--gray-5);
+  padding: 32px 28px;
+  cursor: pointer; transition: background 0.3s;
+  position: relative; overflow: hidden;
+}
+.prod-tile:hover { background: #111; }
+.prod-tile::before {
+  content: ''; position: absolute;
+  bottom: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(41,151,255,0.4), transparent);
+  transform: scaleX(0); transition: transform 0.4s;
+  pointer-events: none;
+}
+.prod-tile:hover::before { transform: scaleX(1); }
+.prod-badge {
+  display: inline-block;
+  font-size: 9px; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--accent); background: var(--accent-dim);
+  border-radius: 4px; padding: 3px 8px;
+  margin-bottom: 28px;
+}
+.prod-vis {
+  height: 110px; display: flex;
+  align-items: center; justify-content: center;
+  margin-bottom: 24px;
+}
+.prod-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 16px; font-weight: 700;
+  letter-spacing: -0.3px; color: var(--white);
+  margin-bottom: 4px;
+}
+.prod-brand {
+  font-size: 11px; color: var(--gray-3);
+  letter-spacing: 0.06em; text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.prod-pricing { display: flex; align-items: baseline; gap: 8px; }
+.prod-price {
+  font-family: 'Syne', sans-serif;
+  font-size: 20px; font-weight: 800;
+  letter-spacing: -0.5px; color: var(--white);
+}
+.prod-old {
+  font-size: 13px; color: var(--gray-3);
+  text-decoration: line-through;
+}
+.prod-btn {
+  width: 100%; margin-top: 20px;
+  background: var(--glass-bg);
+  border: 0.5px solid var(--glass-border);
+  color: var(--white); border-radius: 980px;
+  padding: 11px; font-size: 13px; font-weight: 400;
+  cursor: none; font-family: 'Inter', sans-serif;
+  transition: background 0.2s, border-color 0.2s;
+}
+.prod-btn:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.2);
+}
+
+/* ── VIEW SHOP BUTTON ── */
+.btn-view-shop {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: transparent;
+  border: 0.5px solid rgba(255,255,255,0.2);
+  color: var(--white); font-family: 'Inter', sans-serif;
+  font-size: 14px; font-weight: 400;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 16px 36px; border-radius: 980px;
+  cursor: pointer;
+  transition: background 0.25s, border-color 0.25s, transform 0.2s;
+  position: relative; z-index: 2;
+}
+.btn-view-shop:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.4);
+  transform: scale(1.03);
+}
+
+/* ── REVIEWS ── */
+.reviews-wrap {
+  background: var(--gray-5);
+  border-top: 0.5px solid var(--glass-border);
+  border-bottom: 0.5px solid var(--glass-border);
+  padding: 100px 48px;
+}
+.reviews-inner { max-width: 1200px; margin: 0 auto; }
+.reviews-grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 1.5px; background: var(--glass-border);
+  border-radius: 24px; overflow: hidden;
+  margin-top: 56px;
+}
+.review-card {
+  background: var(--gray-5); padding: 36px 32px;
+}
+.review-stars {
+  display: flex; gap: 3px; margin-bottom: 20px;
+}
+.star {
+  width: 12px; height: 12px; background: var(--white);
+  clip-path: polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+}
+.review-text {
+  font-size: 15px; font-weight: 300;
+  color: var(--gray-1); line-height: 1.65;
+  letter-spacing: -0.1px; margin-bottom: 28px;
+  font-style: italic;
+}
+.review-sep {
+  width: 24px; height: 1px;
+  background: var(--gray-3); margin-bottom: 16px;
+}
+.review-name {
+  font-size: 12px; font-weight: 500;
+  color: var(--gray-2); letter-spacing: 0.05em;
+}
+
+/* ── PRICING ── */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5px; background: var(--glass-border);
+  border-radius: 24px; overflow: hidden;
+  margin-top: 56px;
+}
+.price-card {
+  background: var(--gray-5); padding: 32px 28px;
+  transition: background 0.3s; cursor: default;
+}
+.price-card:hover { background: #111; }
+.price-name {
+  font-size: 13px; font-weight: 500;
+  color: var(--white); margin-bottom: 4px;
+  letter-spacing: -0.2px;
+}
+.price-sub {
+  font-size: 11px; color: var(--gray-3);
+  margin-bottom: 20px; line-height: 1.4;
+}
+.price-amt {
+  font-family: 'Syne', sans-serif;
+  font-size: 26px; font-weight: 800;
+  letter-spacing: -1px; color: var(--white);
+}
+.price-tag {
+  display: inline-block; margin-top: 12px;
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--accent); background: var(--accent-dim);
+  border-radius: 4px; padding: 3px 8px;
+}
+
+/* ── CONTACT ── */
+.contact-section {
+  text-align: center; padding: 140px 48px;
+  position: relative; overflow: hidden;
+}
+.contact-glow {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(41,151,255,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+.contact-section .section-title { margin-bottom: 16px; }
+.contact-section .section-sub {
+  margin: 0 auto 48px; max-width: 400px;
+}
+.contact-btns { display: flex; gap: 12px; justify-content: center; margin-bottom: 64px; }
+.contact-info {
+  display: flex; gap: 48px; justify-content: center;
+  border-top: 0.5px solid var(--glass-border); padding-top: 40px;
+}
+.c-info-item { text-align: left; }
+.c-info-label {
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--gray-3); margin-bottom: 6px;
+}
+.c-info-val {
+  font-size: 14px; color: var(--white); font-weight: 300;
+}
+
+/* ── FOOTER ── */
+footer {
+  border-top: 0.5px solid var(--glass-border);
+  padding: 32px 48px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+footer p { font-size: 12px; color: var(--gray-3); }
+footer a { color: var(--accent); text-decoration: none; }
+
+/* ── WA FLOAT ── */
+.wa-float {
+  position: fixed; bottom: 32px; right: 32px;
+  width: 52px; height: 52px; border-radius: 50%;
+  background: #25D366; border: none;
+  display: flex; align-items: center; justify-content: center;
+  cursor: none; z-index: 500;
+  transition: transform 0.2s;
+  box-shadow: 0 0 0 0 rgba(37,211,102,0.4);
+  animation: waPulse 2.5s infinite;
+}
+.wa-float:hover { transform: scale(1.1); }
+.wa-float svg { width: 24px; height: 24px; fill: #fff; }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed; bottom: 40px; left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: rgba(28,28,30,0.95);
+  backdrop-filter: blur(20px);
+  color: var(--white); font-size: 13px; font-weight: 400;
+  padding: 12px 24px; border-radius: 980px;
+  border: 0.5px solid var(--glass-border);
+  z-index: 999; white-space: nowrap;
+  transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  font-family: 'Inter', sans-serif;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(24px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity:0; } to { opacity:1; }
+}
+@keyframes pulse {
+  0%,100% { opacity:0.3; } 50% { opacity:1; }
+}
+@keyframes waPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(37,211,102,0.4); }
+  70%  { box-shadow: 0 0 0 14px rgba(37,211,102,0); }
+  100% { box-shadow: 0 0 0 0 rgba(37,211,102,0); }
+}
+
+/* ── SCROLL REVEAL ── */
+.reveal {
+  opacity: 0; transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
+}
+.reveal.visible { opacity:1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-logo">Computer Solution</div>
+  <div class="nav-links">
+    <a href="#services">Services</a>
+    <a href="#builder">PC Builder</a>
+    <a href="#shop">Shop</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <div class="nav-right">
+    <span class="nav-cart" id="nav-cart" onclick="showCart()">Cart (0)</span>
+    <button class="btn-nav" onclick="openWA('Book a repair')">Book Repair</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-vignette"></div>
+  <div class="hero-content">
+    <div class="hero-tag">Premium Tech Shop · Est. 2007</div>
+    <h1 class="hero-h1">Your device.<br><em>Brought back</em><br>to life.</h1>
+    <p class="hero-sub">Same-day repairs. Custom builds. Zero data loss. 4,800+ devices fixed across Surat.</p>
+    <div class="hero-ctas">
+      <button class="btn-primary" onclick="openWA('Book same-day repair')">Book a Repair</button>
+      <button class="btn-outline" onclick="document.getElementById('builder').scrollIntoView({behavior:'smooth'})">Build a PC →</button>
+    </div>
+  </div>
+  <div class="hero-hint">
+    <div class="hero-hint-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-strip">
+  <div class="stat">
+    <div class="stat-num">17+</div>
+    <div class="stat-label">Years in Adajan</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">4,800+</div>
+    <div class="stat-label">Devices repaired</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">0</div>
+    <div class="stat-label">Data loss incidents</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">4.9★</div>
+    <div class="stat-label">Google rating</div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section reveal">
+    <p class="eyebrow">What we do</p>
+    <h2 class="section-title">Every repair.<br>Done right.</h2>
+    <p class="section-sub">From cracked screens to dead hard drives — handled in-house, same day.</p>
+    <div class="services-layout">
+      <div class="svc-card span2" style="text-align:center;align-items:center;display:flex;flex-direction:column;">
+        <div class="svc-num" style="text-align:center;">01 — Flagship</div>
+        <div class="svc-icon-line" style="margin-left:auto;margin-right:auto;"></div>
+        <div class="svc-name">Laptop Repair & Servicing</div>
+        <div class="svc-desc" style="max-width:520px;">Screen replacement, motherboard repair, battery, keyboard — Dell, HP, Lenovo, ASUS, Apple and more. Most jobs done the same day you walk in.</div>
+        <div class="svc-price">Starting ₹350 · Free diagnosis · All brands</div>
+        <button class="svc-cta" style="margin:24px auto 0;" onclick="openWA('Hi! I need a laptop repair quote. Can you help?')">
+          Get a quote
+          <span class="svc-arrow">
+            <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+              <path d="M2 6L6 2M6 2H3M6 2V5" stroke="#2997ff" stroke-width="1.2" stroke-linecap="round"/>
+            </svg>
+          </span>
+        </button>
+      </div>
+      <div class="svc-card">
+        <div class="svc-num">02</div>
+        <div class="svc-icon-line"></div>
+        <div class="svc-name">Data Recovery</div>
+        <div class="svc-desc">HDD, SSD, USB, memory cards. We recover what you thought was gone — with full privacy.</div>
+        <div class="svc-price">₹800 – ₹3,500</div>
+        <button class="svc-cta" onclick="openWA('Hi! I need urgent data recovery help. My data is lost.')">
+          Recover now <span class="svc-arrow"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M2 6L6 2M6 2H3M6 2V5" stroke="#2997ff" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+        </button>
+      </div>
+      <div class="svc-card">
+        <div class="svc-num">03</div>
+        <div class="svc-icon-line"></div>
+        <div class="svc-name">Desktop & Upgrades</div>
+        <div class="svc-desc">RAM, SSD, GPU fitting, PSU, thermal paste. Custom gaming and office builds assembled free.</div>
+        <div class="svc-price">Starting ₹250 · Free diagnosis</div>
+        <button class="svc-cta" onclick="openWA('Desktop repair or upgrade')">
+          Get quote <span class="svc-arrow"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M2 6L6 2M6 2H3M6 2V5" stroke="#2997ff" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+        </button>
+      </div>
+      <div class="svc-card">
+        <div class="svc-num">04</div>
+        <div class="svc-icon-line"></div>
+        <div class="svc-name">Windows Setup</div>
+        <div class="svc-desc">Fresh Windows 10/11, all drivers, Office, antivirus. Clean, licensed, done same day.</div>
+        <div class="svc-price">₹500 – ₹900</div>
+        <button class="svc-cta" onclick="openWA('Windows installation')">
+          Book now <span class="svc-arrow"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M2 6L6 2M6 2H3M6 2V5" stroke="#2997ff" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+        </button>
+      </div>
+      <div class="svc-card">
+        <div class="svc-num">05</div>
+        <div class="svc-icon-line"></div>
+        <div class="svc-name">Virus Removal</div>
+        <div class="svc-desc">Full deep clean + antivirus setup. Your system protected for good.</div>
+        <div class="svc-price">₹400 – ₹700</div>
+        <button class="svc-cta" onclick="openWA('Virus removal')">
+          Clean my PC <span class="svc-arrow"><svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M2 6L6 2M6 2H3M6 2V5" stroke="#2997ff" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VIEW SHOP BUTTON + VIDEO MODAL -->
+<div style="text-align:center; padding: 20px 48px 80px;">
+  <button class="btn-view-shop" onclick="openVideoModal()">
+    <span>View Shop</span>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.2"/>
+      <path d="M6.5 5.5L11 8L6.5 10.5V5.5Z" fill="currentColor"/>
+    </svg>
+  </button>
+</div>
+
+<!-- VIDEO MODAL -->
+<div id="video-modal" style="display:none; position:fixed; inset:0; z-index:2000; background:rgba(0,0,0,0.92); backdrop-filter:blur(20px); align-items:center; justify-content:center;">
+  <div style="position:relative; width:90%; max-width:900px;">
+    <button onclick="closeVideoModal()" style="position:absolute; top:-48px; right:0; background:none; border:none; color:rgba(255,255,255,0.6); font-size:13px; cursor:pointer; font-family:'Inter',sans-serif; letter-spacing:0.08em; display:flex; align-items:center; gap:8px;">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M12 4L4 12M4 4L12 12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      CLOSE
+    </button>
+    <div style="border-radius:16px; overflow:hidden; background:#0a0a0a; border:0.5px solid rgba(255,255,255,0.08);">
+      <video id="shop-video" controls style="width:100%; display:block; max-height:70vh; object-fit:contain;">
+        <source src="" id="shop-video-src" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+    <p style="text-align:center; margin-top:16px; font-size:12px; color:rgba(255,255,255,0.3); letter-spacing:0.06em;">COMPUTER SOLUTION — ADAJAN, SURAT</p>
+  </div>
+</div>
+
+<!-- PC BUILDER -->
+<div class="builder-wrap" id="builder">
+  <div class="builder-inner reveal">
+    <p class="eyebrow">Custom Builds</p>
+    <h2 class="section-title">Build your<br>dream PC.</h2>
+    <p class="section-sub">Configure every component. We assemble it — free of charge.</p>
+    <div class="builder-grid">
+      <div class="part-block">
+        <div class="part-label">Processor</div>
+        <select class="part-select" id="cpu" onchange="calcTotal()">
+          <option value="0">Choose CPU</option>
+          <option value="8500">Intel Core i3-12100 — ₹8,500</option>
+          <option value="14500">Intel Core i5-13400 — ₹14,500</option>
+          <option value="22000">Intel Core i7-13700K — ₹22,000</option>
+          <option value="18000">AMD Ryzen 5 7600X — ₹18,000</option>
+          <option value="28000">AMD Ryzen 7 7700X — ₹28,000</option>
+        </select>
+      </div>
+      <div class="part-block">
+        <div class="part-label">Graphics Card</div>
+        <select class="part-select" id="gpu" onchange="calcTotal()">
+          <option value="0">Choose GPU</option>
+          <option value="12000">GTX 1660 Super 6GB — ₹12,000</option>
+          <option value="22000">RTX 3060 12GB — ₹22,000</option>
+          <option value="35000">RTX 4060 8GB — ₹35,000</option>
+          <option value="55000">RTX 4070 12GB — ₹55,000</option>
+        </select>
+      </div>
+      <div class="part-block">
+        <div class="part-label">Memory</div>
+        <select class="part-select" id="ram" onchange="calcTotal()">
+          <option value="0">Choose RAM</option>
+          <option value="1800">8GB DDR4 3200MHz — ₹1,800</option>
+          <option value="3200">16GB DDR4 3200MHz — ₹3,200</option>
+          <option value="6000">32GB DDR5 4800MHz — ₹6,000</option>
+        </select>
+      </div>
+      <div class="part-block">
+        <div class="part-label">Storage</div>
+        <select class="part-select" id="ssd" onchange="calcTotal()">
+          <option value="0">Choose Storage</option>
+          <option value="1500">256GB SSD — ₹1,500</option>
+          <option value="2500">512GB SSD — ₹2,500</option>
+          <option value="4000">1TB NVMe — ₹4,000</option>
+          <option value="6500">2TB NVMe — ₹6,500</option>
+        </select>
+      </div>
+      <div class="part-block">
+        <div class="part-label">Motherboard</div>
+        <select class="part-select" id="mobo" onchange="calcTotal()">
+          <option value="0">Choose Motherboard</option>
+          <option value="6000">H610M Budget — ₹6,000</option>
+          <option value="9500">B660M Gaming — ₹9,500</option>
+          <option value="14000">Z790 Pro — ₹14,000</option>
+        </select>
+      </div>
+      <div class="part-block">
+        <div class="part-label">Cabinet + PSU</div>
+        <select class="part-select" id="cabinet" onchange="calcTotal()">
+          <option value="0">Choose Cabinet</option>
+          <option value="3000">Budget + 450W — ₹3,000</option>
+          <option value="6000">Mid-tower RGB + 600W — ₹6,000</option>
+          <option value="10000">Full-tower + 750W — ₹10,000</option>
+        </select>
+      </div>
+    </div>
+    <div class="builder-total-block">
+      <div>
+        <div class="total-lbl">Estimated Total</div>
+        <div class="total-num" id="total-display">₹0</div>
+        <div class="total-note">Assembly · Free &nbsp;·&nbsp; 30-day warranty included</div>
+      </div>
+      <button class="btn-build" onclick="sendBuildQuote()">Send to WhatsApp →</button>
+    </div>
+  </div>
+</div>
+
+<!-- SHOP -->
+<section id="shop">
+  <div class="section reveal">
+    <div class="shop-header">
+      <div>
+        <p class="eyebrow">Accessories &amp; Components</p>
+        <h2 class="section-title" style="margin-bottom:0">Shop.<br>Best price guaranteed.</h2>
+      </div>
+      <a class="shop-link" href="#">View all &rarr;</a>
+    </div>
+    <div class="products-grid">
+
+      <!-- P1: Laptop -->
+      <div class="prod-tile">
+        <div class="prod-badge">In Stock</div>
+        <div class="prod-vis">
+          <svg width="110" height="75" viewBox="0 0 110 75" fill="none">
+            <rect x="10" y="5" width="90" height="56" rx="5" fill="#1a1a1a" stroke="#333" stroke-width="1"/>
+            <rect x="15" y="10" width="80" height="46" rx="3" fill="#0d0d0d"/>
+            <rect x="18" y="13" width="74" height="40" rx="2" fill="#050810"/>
+            <rect x="32" y="15" width="46" height="2" rx="1" fill="#2997ff" opacity="0.5"/>
+            <rect x="26" y="20" width="58" height="1.5" rx="0.5" fill="#1a2a40"/>
+            <rect x="26" y="25" width="50" height="1.5" rx="0.5" fill="#1a2a40" opacity="0.7"/>
+            <rect x="26" y="30" width="54" height="1.5" rx="0.5" fill="#1a2a40" opacity="0.5"/>
+            <circle cx="55" cy="11" r="1.5" fill="#2997ff" opacity="0.7"/>
+            <rect x="2" y="61" width="106" height="8" rx="3" fill="#161616" stroke="#2a2a2a" stroke-width="0.5"/>
+            <rect x="36" y="62" width="38" height="6" rx="2" fill="#111"/>
+          </svg>
+        </div>
+        <div class="prod-name">Laptop</div>
+        <div class="prod-brand">Dell &middot; HP &middot; Lenovo &middot; ASUS</div>
+        <div class="prod-pricing"><span class="prod-price">&#8377;18,000+</span></div>
+        <button class="prod-btn" onclick="openWA('Hi! I am interested in buying a laptop. Can you share available models and prices?')">Enquire on WhatsApp</button>
+      </div>
+
+      <!-- P2: Gaming Mouse -->
+      <div class="prod-tile">
+        <div class="prod-badge">Hot</div>
+        <div class="prod-vis">
+          <svg width="56" height="84" viewBox="0 0 56 84" fill="none">
+            <path d="M8 34C8 18 18 5 28 5C38 5 48 18 48 34V58C48 70 40 78 28 78C16 78 8 70 8 58V34Z" fill="#1a1a1a" stroke="#333" stroke-width="1"/>
+            <path d="M28 5V42M8 32H48" stroke="#2a2a2a" stroke-width="0.8"/>
+            <ellipse cx="28" cy="60" rx="5" ry="5" fill="#252525"/>
+            <ellipse cx="28" cy="60" rx="2.5" ry="2.5" fill="#2997ff" opacity="0.5"/>
+            <rect x="20" y="8" width="7" height="20" rx="2" fill="#222"/>
+            <rect x="29" y="8" width="7" height="20" rx="2" fill="#222"/>
+          </svg>
+        </div>
+        <div class="prod-name">Gaming Mouse</div>
+        <div class="prod-brand">Logitech &middot; Redragon &middot; HP</div>
+        <div class="prod-pricing"><span class="prod-price">&#8377;499</span><span class="prod-old">&#8377;900</span></div>
+        <button class="prod-btn" onclick="openWA('Hi! I want to buy a gaming mouse. What models and prices do you have?')">Enquire on WhatsApp</button>
+      </div>
+
+      <!-- P3: Keyboard -->
+      <div class="prod-tile">
+        <div class="prod-badge">New</div>
+        <div class="prod-vis">
+          <svg width="106" height="58" viewBox="0 0 106 58" fill="none">
+            <rect x="2" y="6" width="102" height="46" rx="5" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="0.8"/>
+            <g fill="#252525">
+              <rect x="7" y="11" width="8" height="6" rx="1.2"/><rect x="17" y="11" width="8" height="6" rx="1.2"/>
+              <rect x="27" y="11" width="8" height="6" rx="1.2"/><rect x="37" y="11" width="8" height="6" rx="1.2"/>
+              <rect x="47" y="11" width="8" height="6" rx="1.2"/><rect x="57" y="11" width="8" height="6" rx="1.2"/>
+              <rect x="67" y="11" width="8" height="6" rx="1.2"/><rect x="77" y="11" width="8" height="6" rx="1.2"/>
+              <rect x="87" y="11" width="15" height="6" rx="1.2"/>
+              <rect x="7" y="19" width="12" height="6" rx="1.2"/><rect x="21" y="19" width="8" height="6" rx="1.2"/>
+              <rect x="31" y="19" width="8" height="6" rx="1.2"/><rect x="41" y="19" width="8" height="6" rx="1.2"/>
+              <rect x="51" y="19" width="8" height="6" rx="1.2"/><rect x="61" y="19" width="8" height="6" rx="1.2"/>
+              <rect x="71" y="19" width="31" height="6" rx="1.2"/>
+              <rect x="7" y="27" width="16" height="6" rx="1.2"/><rect x="25" y="27" width="8" height="6" rx="1.2"/>
+              <rect x="35" y="27" width="8" height="6" rx="1.2"/><rect x="45" y="27" width="8" height="6" rx="1.2"/>
+              <rect x="55" y="27" width="8" height="6" rx="1.2"/><rect x="65" y="27" width="37" height="6" rx="1.2"/>
+              <rect x="7" y="35" width="8" height="6" rx="1.2"/><rect x="17" y="35" width="8" height="6" rx="1.2"/>
+              <rect x="27" y="35" width="46" height="6" rx="1.2"/><rect x="75" y="35" width="8" height="6" rx="1.2"/>
+              <rect x="85" y="35" width="8" height="6" rx="1.2"/><rect x="95" y="35" width="8" height="6" rx="1.2"/>
+              <rect x="7" y="43" width="12" height="6" rx="1.2"/><rect x="21" y="43" width="12" height="6" rx="1.2"/>
+              <rect x="85" y="43" width="12" height="6" rx="1.2"/>
+            </g>
+            <rect x="7" y="11" width="8" height="6" rx="1.2" fill="#2997ff" opacity="0.5"/>
+            <rect x="27" y="11" width="8" height="6" rx="1.2" fill="#2997ff" opacity="0.3"/>
+          </svg>
+        </div>
+        <div class="prod-name">Keyboard</div>
+        <div class="prod-brand">Mechanical &middot; Membrane &middot; Wireless</div>
+        <div class="prod-pricing"><span class="prod-price">&#8377;499</span><span class="prod-old">&#8377;1,000</span></div>
+        <button class="prod-btn" onclick="openWA('Hi! I want to buy a keyboard. What types and prices do you have?')">Enquire on WhatsApp</button>
+      </div>
+
+      <!-- P4: Gaming Headphones -->
+      <div class="prod-tile">
+        <div class="prod-vis" style="margin-top:4px">
+          <svg width="90" height="86" viewBox="0 0 90 86" fill="none">
+            <path d="M20 44C20 24 32 10 45 10C58 10 70 24 70 44" stroke="#2a2a2a" stroke-width="6" fill="none" stroke-linecap="round"/>
+            <rect x="6" y="39" width="18" height="28" rx="9" fill="#1a1a1a" stroke="#333" stroke-width="1"/>
+            <rect x="9" y="43" width="12" height="20" rx="6" fill="#111"/>
+            <circle cx="15" cy="53" r="4" fill="#252525"/>
+            <circle cx="15" cy="53" r="2" fill="#2997ff" opacity="0.4"/>
+            <rect x="66" y="39" width="18" height="28" rx="9" fill="#1a1a1a" stroke="#333" stroke-width="1"/>
+            <rect x="69" y="43" width="12" height="20" rx="6" fill="#111"/>
+            <circle cx="75" cy="53" r="4" fill="#252525"/>
+            <circle cx="75" cy="53" r="2" fill="#2997ff" opacity="0.4"/>
+            <path d="M22 44C22 27 34 14 45 14C56 14 68 27 68 44" stroke="#252525" stroke-width="10" fill="none" stroke-linecap="round"/>
+            <line x1="6" y1="67" x2="1" y2="80" stroke="#333" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="1" cy="81" r="2" fill="#2997ff" opacity="0.6"/>
+          </svg>
+        </div>
+        <div class="prod-name">Gaming Headphones</div>
+        <div class="prod-brand">HyperX &middot; Redragon &middot; Cosmic Byte</div>
+        <div class="prod-pricing"><span class="prod-price">&#8377;799</span><span class="prod-old">&#8377;1,500</span></div>
+        <button class="prod-btn" onclick="openWA('Hi! I am looking for gaming headphones. What brands do you have?')">Enquire on WhatsApp</button>
+      </div>
+
+      <!-- P5: 512GB NVMe SSD -->
+      <div class="prod-tile">
+        <div class="prod-vis" style="margin-top:16px">
+          <svg width="114" height="58" viewBox="0 0 114 58" fill="none">
+            <rect x="2" y="10" width="110" height="38" rx="4" fill="#1a1a1a" stroke="#333" stroke-width="1"/>
+            <rect x="8" y="16" width="62" height="26" rx="2" fill="#0d0d0d"/>
+            <rect x="11" y="19" width="56" height="9" rx="1" fill="#1e1e1e"/>
+            <rect x="11" y="30" width="42" height="9" rx="1" fill="#191919"/>
+            <rect x="11" y="19" width="16" height="5" rx="0.5" fill="#2997ff" opacity="0.6"/>
+            <rect x="80" y="14" width="18" height="14" rx="2" fill="#222"/>
+            <rect x="80" y="31" width="18" height="14" rx="2" fill="#222"/>
+            <rect x="100" y="17" width="10" height="4" rx="1" fill="#2a2a2a"/>
+            <rect x="100" y="33" width="10" height="4" rx="1" fill="#2a2a2a"/>
+          </svg>
+        </div>
+        <div class="prod-name">512GB NVMe SSD</div>
+        <div class="prod-brand">Samsung &middot; Kingston &middot; WD</div>
+        <div class="prod-pricing"><span class="prod-price">&#8377;2,800</span><span class="prod-old">&#8377;3,500</span></div>
+        <button class="prod-btn" onclick="openWA('Hi! I need a 512GB NVMe SSD. What brands do you have in stock?')">Enquire on WhatsApp</button>
+      </div>
+
+      <!-- P6: 16GB DDR4 RAM -->
+      <div class="prod-tile">
+        <div class="prod-badge">Sale</div>
+        <div class="prod-vis">
+          <svg width="32" height="100" viewBox="0 0 32 100" fill="none">
+            <rect x="7" y="4" width="18" height="78" rx="2" fill="#1a1a1a" stroke="#333" stroke-width="1"/>
+            <rect x="10" y="8" width="12" height="70" rx="1" fill="#0d0d0d"/>
+            <g fill="#222">
+              <rect x="11" y="10" width="10" height="5" rx="0.5"/><rect x="11" y="17" width="10" height="5" rx="0.5"/>
+              <rect x="11" y="24" width="10" height="5" rx="0.5"/><rect x="11" y="31" width="10" height="5" rx="0.5"/>
+              <rect x="11" y="38" width="10" height="5" rx="0.5"/><rect x="11" y="45" width="10" height="5" rx="0.5"/>
+              <rect x="11" y="52" width="10" height="5" rx="0.5"/><rect x="11" y="59" width="10" height="5" rx="0.5"/>
+              <rect x="11" y="66" width="10" height="5" rx="0.5"/>
+            </g>
+            <rect x="11" y="10" width="10" height="5" rx="0.5" fill="#2997ff" opacity="0.6"/>
+            <rect x="11" y="17" width="10" height="5" rx="0.5" fill="#2997ff" opacity="0.3"/>
+            <rect x="4" y="82" width="5" height="14" rx="1" fill="#2a2a2a"/>
+            <rect x="23" y="82" width="5" height="14" rx="1" fill="#2a2a2a"/>
+          </svg>
+        </div>
+        <div class="prod-name">16GB DDR4 3200MHz</div>
+        <div class="prod-brand">Corsair &middot; G.Skill &middot; Kingston</div>
+        <div class="prod-pricing"><span class="prod-price">&#8377;3,200</span><span class="prod-old">&#8377;4,000</span></div>
+        <button class="prod-btn" onclick="openWA('Hi! I need 16GB DDR4 3200MHz RAM. What is available?')">Enquire on WhatsApp</button>
+      </div>
+
+      <!-- P7: Laptop Charger -->
+      <div class="prod-tile">
+        <div class="prod-vis" style="margin-top:8px">
+          <svg width="80" height="90" viewBox="0 0 80 90" fill="none">
+            <rect x="20" y="8" width="40" height="30" rx="5" fill="#1a1a1a" stroke="#333" stroke-width="1"/>
+            <rect x="25" y="13" width="30" height="20" rx="3" fill="#111"/>
+            <rect x="25" y="13" width="12" height="5" rx="1" fill="#2997ff" opacity="0.5"/>
+            <text x="30" y="27" fill="#444" font-size="7" font-family="monospace">65W</text>
+            <line x1="40" y1="38" x2="40" y2="56" stroke="#2a2a2a" stroke-width="3.5" stroke-linecap="round"/>
+            <rect x="34" y="56" width="12" height="6" rx="2" fill="#252525" stroke="#333" stroke-width="0.5"/>
+            <rect x="34" y="62" width="12" height="22" rx="2" fill="#1e1e1e" stroke="#2a2a2a" stroke-width="0.5"/>
+            <rect x="37" y="84" width="6" height="4" rx="1" fill="#2997ff" opacity="0.4"/>
+          </svg>
+        </div>
+        <div class="prod-name">Laptop Charger</div>
+        <div class="prod-brand">Dell &middot; HP &middot; Lenovo &middot; Universal</div>
+        <div class="prod-pricing"><span class="prod-price">&#8377;349</span><span class="prod-old">&#8377;700</span></div>
+        <button class="prod-btn" onclick="openWA('Hi! I need a laptop charger. Can you tell me available brands and compatibility?')">Enquire on WhatsApp</button>
+      </div>
+
+      <!-- P8: Converters & Cables -->
+      <div class="prod-tile">
+        <div class="prod-vis" style="margin-top:4px">
+          <svg width="110" height="86" viewBox="0 0 110 86" fill="none">
+            <path d="M18 20 Q18 44 18 62" stroke="#2a2a2a" stroke-width="4" fill="none" stroke-linecap="round"/>
+            <rect x="10" y="12" width="16" height="10" rx="2.5" fill="#1a1a1a" stroke="#333" stroke-width="0.8"/>
+            <rect x="12" y="14" width="12" height="6" rx="1.5" fill="#252525"/>
+            <rect x="10" y="62" width="16" height="10" rx="2.5" fill="#1a1a1a" stroke="#333" stroke-width="0.8"/>
+            <rect x="12" y="64" width="12" height="6" rx="1.5" fill="#2997ff" opacity="0.45"/>
+            <path d="M55 20 Q55 44 55 62" stroke="#333" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+            <rect x="47" y="12" width="16" height="10" rx="2" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="0.8"/>
+            <rect x="49" y="15" width="12" height="4" rx="1" fill="#252525"/>
+            <rect x="47" y="62" width="16" height="10" rx="2" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="0.8"/>
+            <rect x="49" y="65" width="12" height="4" rx="1" fill="#2997ff" opacity="0.35"/>
+            <rect x="82" y="30" width="22" height="12" rx="3" fill="#1a1a1a" stroke="#333" stroke-width="0.8"/>
+            <rect x="84" y="33" width="8" height="6" rx="1" fill="#2a2a2a"/>
+            <rect x="96" y="34" width="6" height="4" rx="1" fill="#2997ff" opacity="0.4"/>
+            <line x1="93" y1="42" x2="93" y2="56" stroke="#2a2a2a" stroke-width="2.5" stroke-linecap="round"/>
+            <rect x="87" y="56" width="12" height="8" rx="2" fill="#1a1a1a" stroke="#333" stroke-width="0.8"/>
+          </svg>
+        </div>
+        <div class="prod-name">Converters &amp; Cables</div>
+        <div class="prod-brand">USB-C &middot; HDMI &middot; VGA &middot; Type-A</div>
+        <div class="prod-pricing"><span class="prod-price">&#8377;149</span><span class="prod-old">&#8377;400</span></div>
+        <button class="prod-btn" onclick="openWA('Hi! I need a converter or cable. What types and prices do you have?')">Enquire on WhatsApp</button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<div class="reviews-wrap">
+  <div class="reviews-inner reveal">
+    <p class="eyebrow">Testimonials</p>
+    <h2 class="section-title">Neighbours<br>trust us.</h2>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="review-stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div>
+        <p class="review-text">"My HP laptop completely stopped turning on before my CA exam. Rehan bhai fixed it in 3 hours. He saved all my study files. This shop is a lifesaver."</p>
+        <div class="review-sep"></div>
+        <div class="review-name">Pratik Desai · Adajan Patiya</div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div>
+        <p class="review-text">"Got my old desktop upgraded with an SSD and RAM. Now it runs Windows 11 better than my office laptop. Price was so fair — no extras added."</p>
+        <div class="review-sep"></div>
+        <div class="review-name">Mehul Vora · Vesu, Surat</div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div>
+        <p class="review-text">"My hard drive crashed and I thought I'd lost 3 years of work. Computer Solution recovered everything — called me step by step. I'm still shocked."</p>
+        <div class="review-sep"></div>
+        <div class="review-name">Nisha Kapadia · Adajan</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="section reveal">
+    <p class="eyebrow">Pricing</p>
+    <h2 class="section-title">No hidden<br>charges. Ever.</h2>
+    <p class="section-sub">We give you the real price before we start. What you see is what you pay.</p>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-name">Diagnosis & Inspection</div>
+        <div class="price-sub">Full hardware check, no obligations</div>
+        <div class="price-amt">Free</div>
+        <span class="price-tag">Always</span>
+      </div>
+      <div class="price-card">
+        <div class="price-name">Windows 10 / 11 Install</div>
+        <div class="price-sub">Drivers + basic software included</div>
+        <div class="price-amt">₹500–₹700</div>
+      </div>
+      <div class="price-card">
+        <div class="price-name">Screen Replacement</div>
+        <div class="price-sub">Parts + labour, varies by model</div>
+        <div class="price-amt">₹1,800–₹5,500</div>
+      </div>
+      <div class="price-card">
+        <div class="price-name">SSD Upgrade</div>
+        <div class="price-sub">Install + OS migration included</div>
+        <div class="price-amt">₹1,800–₹3,200</div>
+      </div>
+      <div class="price-card">
+        <div class="price-name">RAM Upgrade</div>
+        <div class="price-sub">4GB / 8GB / 16GB options</div>
+        <div class="price-amt">₹800–₹2,800</div>
+      </div>
+      <div class="price-card">
+        <div class="price-name">Battery Replacement</div>
+        <div class="price-sub">OEM & compatible, by model</div>
+        <div class="price-amt">₹900–₹2,500</div>
+      </div>
+      <div class="price-card">
+        <div class="price-name">Data Recovery</div>
+        <div class="price-sub">HDD / SSD / USB / memory card</div>
+        <div class="price-amt">₹800–₹3,500</div>
+      </div>
+      <div class="price-card">
+        <div class="price-name">Virus Removal</div>
+        <div class="price-sub">Full clean + antivirus setup</div>
+        <div class="price-amt">₹400–₹700</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="contact-section">
+  <div class="contact-glow"></div>
+  <p class="eyebrow">Get in touch</p>
+  <h2 class="section-title">Let's fix it today.</h2>
+  <p class="section-sub">Walk in or reach out. We're here Mon–Sat, 10:30 AM – 9 PM.</p>
+  <div class="contact-btns">
+    <button class="btn-primary" onclick="openWA('Book a repair today')">WhatsApp Us</button>
+    <a href="tel:+917878787858" style="text-decoration:none">
+      <button class="btn-outline">Call +91 78787 87858</button>
+    </a>
+  </div>
+  <div class="contact-info">
+    <div class="c-info-item">
+      <div class="c-info-label">Address</div>
+      <div class="c-info-val">Shop No.1 D-20, Krishna Nagar Soc.,<br>Adajan, Surat — 395009</div>
+    </div>
+    <div class="c-info-item">
+      <div class="c-info-label">Hours</div>
+      <div class="c-info-val">Mon – Sat<br>10:30 AM – 9:00 PM</div>
+    </div>
+    <div class="c-info-item">
+      <div class="c-info-label">Email</div>
+      <div class="c-info-val">computersolution2003<br>@gmail.com</div>
+    </div>
+    <div class="c-info-item">
+      <div class="c-info-label">Instagram</div>
+      <div class="c-info-val">@Computer_Solution_786</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 Computer Solution · Adajan, Surat</p>
+  <p>Built by <a href="#">The Reach Crafter</a></p>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<button class="wa-float" onclick="openWA('Hi! I need help with my device.')">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+</button>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ── CURSOR ── */
+const cur = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx=0, my=0, rx=0, ry=0;
+document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; });
+function animCursor() {
+  cur.style.left = mx+'px'; cur.style.top = my+'px';
+  rx += (mx-rx)*0.12; ry += (my-ry)*0.12;
+  ring.style.left = rx+'px'; ring.style.top = ry+'px';
+  requestAnimationFrame(animCursor);
+}
+animCursor();
+
+/* ── NAV SCROLL ── */
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
+});
+
+/* ── SCROLL REVEAL ── */
+const revealEls = document.querySelectorAll('.reveal');
+const ro = new IntersectionObserver(entries => {
+  entries.forEach((e,i) => {
+    if(e.isIntersecting) { e.target.classList.add('visible'); ro.unobserve(e.target); }
+  });
+}, { threshold: 0.12 });
+revealEls.forEach(el => ro.observe(el));
+
+/* ── CART ── */
+let cartCount = 0;
+function addCart(name) {
+  cartCount++;
+  document.getElementById('nav-cart').textContent = `Cart (${cartCount})`;
+  showToast('Added: ' + name);
+}
+function showCart() {
+  if(cartCount > 0) openWA(`I want to order ${cartCount} item(s) from your shop`);
+  else showToast('Your cart is empty');
+}
+
+/* ── TOAST ── */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+/* ── WA ── */
+function openWA(msg) {
+  window.open('https://wa.me/917878787858?text=' + encodeURIComponent('Hi Computer Solution! ' + msg), '_blank');
+}
+
+/* ── VIDEO MODAL ── */
+function openVideoModal() {
+  const modal = document.getElementById('video-modal');
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+function closeVideoModal() {
+  const modal = document.getElementById('video-modal');
+  const video = document.getElementById('shop-video');
+  video.pause();
+  modal.style.display = 'none';
+  document.body.style.overflow = '';
+}
+document.getElementById('video-modal').addEventListener('click', function(e) {
+  if(e.target === this) closeVideoModal();
+});
+
+/* ── PC BUILDER ── */
+function calcTotal() {
+  let total = 0;
+  ['cpu','gpu','ram','ssd','mobo','cabinet'].forEach(k => {
+    const el = document.getElementById(k);
+    if(el) total += parseInt(el.value) || 0;
+  });
+  document.getElementById('total-display').textContent = '₹' + total.toLocaleString('en-IN');
+}
+function sendBuildQuote() {
+  const labels = {cpu:'CPU',gpu:'GPU',ram:'RAM',ssd:'Storage',mobo:'Motherboard',cabinet:'Cabinet'};
+  let parts = [], total = 0;
+  Object.keys(labels).forEach(k => {
+    const el = document.getElementById(k);
+    if(el && el.value !== '0') {
+      parts.push(labels[k] + ': ' + el.options[el.selectedIndex].text.split('—')[0].trim());
+      total += parseInt(el.value) || 0;
+    }
+  });
+  if(!parts.length) { showToast('Please select at least one component'); return; }
+  openWA('Custom PC Build:\n' + parts.join('\n') + '\nTotal: ₹' + total.toLocaleString('en-IN'));
+}
+
+/* ── THREE.JS HERO ── */
+(function() {
+  const canvas = document.getElementById('hero-canvas');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setClearColor(0x000000, 0);
+  renderer.shadowMap.enabled = true;
+
+  const hero = document.querySelector('.hero');
+  function resize() {
+    const w = hero.offsetWidth, h = hero.offsetHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
+  camera.position.set(0, 0.6, 5.5);
+  camera.lookAt(0, 0, 0);
+
+  /* Materials */
+  const matChassis = new THREE.MeshStandardMaterial({
+    color: 0x161616, roughness: 0.18, metalness: 0.92
+  });
+  const matScreen = new THREE.MeshStandardMaterial({
+    color: 0x030812, roughness: 0.04, metalness: 0.1,
+    emissive: new THREE.Color(0x0a2848), emissiveIntensity: 0.9
+  });
+  const matBezel = new THREE.MeshStandardMaterial({
+    color: 0x0d0d0d, roughness: 0.3, metalness: 0.7
+  });
+  const matKey = new THREE.MeshStandardMaterial({
+    color: 0x1e1e1e, roughness: 0.5, metalness: 0.5
+  });
+  const matAccent = new THREE.MeshStandardMaterial({
+    color: 0x2997ff, roughness: 0.2, metalness: 0.6,
+    emissive: new THREE.Color(0x1050a0), emissiveIntensity: 0.6
+  });
+  const matTrackpad = new THREE.MeshStandardMaterial({
+    color: 0x111111, roughness: 0.15, metalness: 0.8
+  });
+
+  const g = new THREE.Group();
+
+  /* Base */
+  const base = new THREE.Mesh(
+    new THREE.BoxGeometry(3.2, 0.09, 2.2),
+    matChassis
+  );
+  g.add(base);
+
+  /* Bottom chamfer strip */
+  const chamfer = new THREE.Mesh(
+    new THREE.BoxGeometry(3.16, 0.012, 0.04),
+    matAccent
+  );
+  chamfer.position.set(0, 0.051, 1.06);
+  g.add(chamfer);
+
+  /* Lid */
+  const lid = new THREE.Mesh(
+    new THREE.BoxGeometry(3.2, 0.07, 2.1),
+    matChassis
+  );
+  lid.position.set(0, 1.12, -0.05);
+  lid.rotation.x = -Math.PI * 0.46;
+  g.add(lid);
+
+  /* Screen */
+  const screen = new THREE.Mesh(
+    new THREE.BoxGeometry(3.0, 1.88, 0.012),
+    matScreen
+  );
+  screen.position.set(0, 1.12 + 0.96, -0.05 - 1.02);
+  screen.rotation.x = -Math.PI * 0.46;
+  g.add(screen);
+
+  /* Bezel around screen */
+  const bezel = new THREE.Mesh(
+    new THREE.BoxGeometry(3.06, 1.94, 0.004),
+    matBezel
+  );
+  bezel.position.set(0, 1.12 + 0.955, -0.05 - 1.01);
+  bezel.rotation.x = -Math.PI * 0.46;
+  g.add(bezel);
+
+  /* Apple-style notch */
+  const notch = new THREE.Mesh(
+    new THREE.BoxGeometry(0.28, 0.06, 0.006),
+    matBezel
+  );
+  notch.position.set(0, 1.12 + 1.87, -0.05 - 1.93);
+  notch.rotation.x = -Math.PI * 0.46;
+  g.add(notch);
+
+  /* Screen glow line at bottom */
+  const glowBar = new THREE.Mesh(
+    new THREE.BoxGeometry(2.4, 0.012, 0.006),
+    matAccent
+  );
+  glowBar.position.set(0, 1.12 + 0.07, -0.05 - 0.1);
+  glowBar.rotation.x = -Math.PI * 0.46;
+  g.add(glowBar);
+
+  /* Keyboard keys */
+  const keyMat = matKey;
+  const rows = [
+    { y: -0.2, keys: 13, xStart: -1.44, w: 0.2, h: 0.18 },
+    { y: 0.0,  keys: 12, xStart: -1.32, w: 0.2, h: 0.18 },
+    { y: 0.2,  keys: 11, xStart: -1.2,  w: 0.2, h: 0.18 },
+    { y: 0.4,  keys: 10, xStart: -1.05, w: 0.22, h: 0.18 },
+  ];
+  rows.forEach(row => {
+    for(let i=0; i<row.keys; i++) {
+      const key = new THREE.Mesh(
+        new THREE.BoxGeometry(row.w - 0.03, 0.04, row.h - 0.03),
+        keyMat
+      );
+      key.position.set(row.xStart + i * (row.w + 0.02), 0.065, row.y);
+      g.add(key);
+    }
+  });
+
+  /* Space bar */
+  const space = new THREE.Mesh(
+    new THREE.BoxGeometry(1.1, 0.04, 0.16),
+    matKey
+  );
+  space.position.set(0, 0.065, 0.58);
+  g.add(space);
+
+  /* Trackpad */
+  const trackpad = new THREE.Mesh(
+    new THREE.BoxGeometry(1.0, 0.012, 0.66),
+    matTrackpad
+  );
+  trackpad.position.set(0, 0.047, 0.78);
+  g.add(trackpad);
+
+  /* Port accents */
+  [-1.58, 1.58].forEach(x => {
+    const port = new THREE.Mesh(
+      new THREE.BoxGeometry(0.08, 0.05, 0.22),
+      matAccent
+    );
+    port.position.set(x, 0.02, 0.3);
+    g.add(port);
+  });
+
+  g.position.set(0, -0.4, 0);
+  g.rotation.x = 0.1;
+  scene.add(g);
+
+  /* Lighting */
+  scene.add(new THREE.AmbientLight(0xffffff, 0.35));
+
+  const key1 = new THREE.DirectionalLight(0xffffff, 1.4);
+  key1.position.set(4, 6, 4);
+  scene.add(key1);
+
+  const fill = new THREE.DirectionalLight(0x7ab4ff, 0.6);
+  fill.position.set(-4, 2, -3);
+  scene.add(fill);
+
+  const rim = new THREE.DirectionalLight(0x2997ff, 1.0);
+  rim.position.set(0, -3, -5);
+  scene.add(rim);
+
+  const screenGlow = new THREE.PointLight(0x2060c0, 0.8, 4);
+  screenGlow.position.set(0, 2.2, -2.8);
+  scene.add(screenGlow);
+
+  /* Reflection plane */
+  const reflGeo = new THREE.PlaneGeometry(12, 12);
+  const reflMat = new THREE.MeshStandardMaterial({
+    color: 0x000000, roughness: 0.05, metalness: 1,
+    transparent: true, opacity: 0.18
+  });
+  const refl = new THREE.Mesh(reflGeo, reflMat);
+  refl.rotation.x = -Math.PI/2;
+  refl.position.y = -0.46;
+  scene.add(refl);
+
+  /* Drag control */
+  let dragging=false, prevX=0, prevY=0, rotY=0.25, rotX=0.1, autoRot=true;
+  canvas.addEventListener('mousedown', e => { dragging=true; prevX=e.clientX; prevY=e.clientY; autoRot=false; });
+  window.addEventListener('mouseup', () => { dragging=false; setTimeout(()=>autoRot=true, 4000); });
+  window.addEventListener('mousemove', e => {
+    if(!dragging) return;
+    rotY += (e.clientX - prevX) * 0.007;
+    rotX += (e.clientY - prevY) * 0.004;
+    rotX = Math.max(-0.45, Math.min(0.55, rotX));
+    prevX=e.clientX; prevY=e.clientY;
+  });
+  canvas.addEventListener('touchstart', e => { dragging=true; prevX=e.touches[0].clientX; autoRot=false; }, {passive:true});
+  canvas.addEventListener('touchend', () => { dragging=false; setTimeout(()=>autoRot=true, 4000); });
+  canvas.addEventListener('touchmove', e => {
+    if(!dragging) return;
+    rotY += (e.touches[0].clientX - prevX) * 0.007;
+    prevX=e.touches[0].clientX;
+  }, {passive:true});
+
+  window.addEventListener('resize', resize);
+  resize();
+
+  let t = 0;
+  function animate() {
+    requestAnimationFrame(animate);
+    t += 0.006;
+    if(autoRot) rotY += 0.004;
+    g.rotation.y = rotY;
+    g.rotation.x = rotX + Math.sin(t) * 0.015;
+    g.position.y = -0.4 + Math.sin(t * 0.7) * 0.055;
+    screenGlow.intensity = 0.7 + Math.sin(t*1.3)*0.15;
+    renderer.render(scene, camera);
+  }
+  animate();
+})();
+</script>
+</body>
+</html>
