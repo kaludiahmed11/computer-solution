@@ -1578,24 +1578,25 @@ const defaultProducts = [
 ];
 
 function renderProductCards(list) {
-  return list.map(p => {
+  let html = '';
+  list.forEach(function(p) {
     const isLaptop = p.name && p.name.toLowerCase() === 'laptop';
-    return \`
-    <div class="prod-tile" \${isLaptop ? 'onclick="openLaptopModal()"' : ''}>
-      \${p.badge ? \`<div class="prod-badge">\${p.badge}</div>\` : ''}
-      <div class="prod-vis">\${getDefaultSVG(p.name)}</div>
-      <div class="prod-name">\${p.name}</div>
-      <div class="prod-brand">\${p.brand}</div>
-      <div class="prod-pricing">
-        <span class="prod-price">\${p.price}</span>
-        \${p.oldPrice ? \`<span class="prod-old">\${p.oldPrice}</span>\` : ''}
-      </div>
-      \${isLaptop
-        ? \`<button class="prod-btn" onclick="event.stopPropagation();openLaptopModal()">View Models ↓</button>\`
-        : \`<button class="prod-btn" onclick="openWA('\${p.wa || 'Hi! I need help with ' + p.name}')">Enquire on WhatsApp</button>\`
-      }
-    </div>\`;
-  }).join('');
+    const badge = p.badge ? '<div class="prod-badge">' + p.badge + '</div>' : '';
+    const oldP = p.oldPrice ? '<span class="prod-old">' + p.oldPrice + '</span>' : '';
+    const btn = isLaptop
+      ? '<button class="prod-btn" onclick="event.stopPropagation();openLaptopModal()">View Models &#8595;</button>'
+      : '<button class="prod-btn" onclick="openWA(\'' + (p.wa || 'Hi! I need help') + '\')">Enquire on WhatsApp</button>';
+    const onclick = isLaptop ? ' onclick="openLaptopModal()"' : '';
+    html += '<div class="prod-tile"' + onclick + '>'
+      + badge
+      + '<div class="prod-vis">' + getDefaultSVG(p.name) + '</div>'
+      + '<div class="prod-name">' + p.name + '</div>'
+      + '<div class="prod-brand">' + p.brand + '</div>'
+      + '<div class="prod-pricing"><span class="prod-price">' + p.price + '</span>' + oldP + '</div>'
+      + btn
+      + '</div>';
+  });
+  return html;
 }
 
 const laptopStaticCard = {
@@ -1605,21 +1606,21 @@ const laptopStaticCard = {
 };
 
 /* ── LOAD PRODUCTS ── */
-onSnapshot(collection(db, 'products'), (snap) => {
+onSnapshot(collection(db, 'products'), function(snap) {
   const grid = document.getElementById('products-grid');
   if(!grid) return;
 
   let list = [laptopStaticCard];
 
   if(snap.empty) {
-    list = list.concat(defaultProducts.filter(p => p.name.toLowerCase() !== 'laptop'));
+    list = list.concat(defaultProducts.filter(function(p){ return p.name.toLowerCase() !== 'laptop'; }));
   } else {
-    snap.forEach(d => {
+    snap.forEach(function(d) {
       const p = d.data();
       list.push({
         name: p.name||'', brand: p.brand||'', price: p.price||'',
         oldPrice: p.oldPrice||'', badge: p.badge||'',
-        wa: \`Hi! I am interested in \${p.name||'this product'}. Can you share details?\`
+        wa: 'Hi! I am interested in ' + (p.name||'this product') + '. Can you share details?'
       });
     });
   }
