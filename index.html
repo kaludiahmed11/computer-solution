@@ -1565,58 +1565,90 @@ function getDefaultSVG(name) {
   return `<svg width="80" height="80" viewBox="0 0 80 80" fill="none"><rect x="10" y="20" width="60" height="50" rx="5" fill="#1a1a1a" stroke="#333" stroke-width="1"/><rect x="25" y="10" width="30" height="14" rx="3" fill="#1a1a1a" stroke="#333" stroke-width="1"/><rect x="30" y="35" width="20" height="3" rx="1" fill="#2997ff" opacity="0.5"/><rect x="30" y="42" width="16" height="3" rx="1" fill="#333"/><rect x="30" y="49" width="18" height="3" rx="1" fill="#333"/></svg>`;
 }
 
+/* ── DEFAULT STATIC PRODUCTS (shown when Firebase empty) ── */
+const defaultProducts = [
+  { name:'Laptop', brand:'Dell · HP · Lenovo · ASUS', price:'₹18,000+', oldPrice:'', badge:'In Stock', wa:'Hi! I am interested in buying a laptop. Can you share available models and prices?' },
+  { name:'Gaming Mouse', brand:'Logitech · Redragon · HP', price:'₹499', oldPrice:'₹900', badge:'Hot', wa:'Hi! I want to buy a gaming mouse. What models and prices do you have?' },
+  { name:'Keyboard', brand:'Mechanical · Membrane · Wireless', price:'₹499', oldPrice:'₹1,000', badge:'New', wa:'Hi! I want to buy a keyboard. What types and prices do you have?' },
+  { name:'Gaming Headphones', brand:'HyperX · Redragon · Cosmic Byte', price:'₹799', oldPrice:'₹1,500', badge:'', wa:'Hi! I am looking for gaming headphones. What brands do you have?' },
+  { name:'512GB NVMe SSD', brand:'Samsung · Kingston · WD', price:'₹2,800', oldPrice:'₹3,500', badge:'', wa:'Hi! I need a 512GB NVMe SSD. What brands do you have in stock?' },
+  { name:'16GB DDR4 3200MHz', brand:'Corsair · G.Skill · Kingston', price:'₹3,200', oldPrice:'₹4,000', badge:'Sale', wa:'Hi! I need 16GB DDR4 3200MHz RAM. What is available?' },
+  { name:'Laptop Charger', brand:'Dell · HP · Lenovo · Universal', price:'₹349', oldPrice:'₹700', badge:'', wa:'Hi! I need a laptop charger. Can you tell me available brands?' },
+  { name:'Converters & Cables', brand:'USB-C · HDMI · VGA · Type-A', price:'₹149', oldPrice:'₹400', badge:'', wa:'Hi! I need a converter or cable. What types and prices do you have?' },
+];
+
+function renderProductCards(list) {
+  return list.map(p => `
+    <div class="prod-tile">
+      ${p.badge ? `<div class="prod-badge">${p.badge}</div>` : ''}
+      <div class="prod-vis">${getDefaultSVG(p.name)}</div>
+      <div class="prod-name">${p.name}</div>
+      <div class="prod-brand">${p.brand}</div>
+      <div class="prod-pricing">
+        <span class="prod-price">${p.price}</span>
+        ${p.oldPrice ? `<span class="prod-old">${p.oldPrice}</span>` : ''}
+      </div>
+      <button class="prod-btn" onclick="openWA('${p.wa || 'Hi! I need help with ' + p.name}')">Enquire on WhatsApp</button>
+    </div>`).join('');
+}
+
 /* ── LOAD PRODUCTS ── */
 onSnapshot(collection(db, 'products'), (snap) => {
   const grid = document.getElementById('products-grid');
   if(!grid) return;
-  
   if(snap.empty) {
-    grid.innerHTML = '<div style="grid-column:1/-1;padding:48px;text-align:center;color:rgba(255,255,255,0.3);font-size:13px;">Admin panel se products add karo</div>';
+    // Show default static cards
+    grid.innerHTML = renderProductCards(defaultProducts);
     return;
   }
-
-  let html = '';
+  const list = [];
   snap.forEach(d => {
     const p = d.data();
-    const svg = getDefaultSVG(p.name || '');
-    html += `
-    <div class="prod-tile">
-      ${p.badge ? `<div class="prod-badge">${p.badge}</div>` : ''}
-      <div class="prod-vis">${svg}</div>
-      <div class="prod-name">${p.name || ''}</div>
-      <div class="prod-brand">${p.brand || ''}</div>
-      <div class="prod-pricing">
-        <span class="prod-price">${p.price || ''}</span>
-        ${p.oldPrice ? `<span class="prod-old">${p.oldPrice}</span>` : ''}
-      </div>
-      <button class="prod-btn" onclick="openWA('Hi! I am interested in ${p.name || 'this product'}. Can you share details?')">Enquire on WhatsApp</button>
-    </div>`;
+    list.push({
+      name: p.name||'', brand: p.brand||'', price: p.price||'',
+      oldPrice: p.oldPrice||'', badge: p.badge||'',
+      wa: `Hi! I am interested in ${p.name||'this product'}. Can you share details?`
+    });
   });
-  grid.innerHTML = html;
+  grid.innerHTML = renderProductCards(list);
 });
+
+/* ── DEFAULT STATIC PRICING ── */
+const defaultPricing = [
+  { name:'Diagnosis & Inspection', desc:'Full hardware check, no obligations', price:'Free', tag:'Always' },
+  { name:'Windows 10 / 11 Install', desc:'Drivers + basic software included', price:'₹500–₹700', tag:'' },
+  { name:'Screen Replacement', desc:'Parts + labour, varies by model', price:'₹1,800–₹5,500', tag:'' },
+  { name:'SSD Upgrade', desc:'Install + OS migration included', price:'₹1,800–₹3,200', tag:'' },
+  { name:'RAM Upgrade', desc:'4GB / 8GB / 16GB options', price:'₹800–₹2,800', tag:'' },
+  { name:'Battery Replacement', desc:'OEM & compatible, by model', price:'₹900–₹2,500', tag:'' },
+  { name:'Data Recovery', desc:'HDD / SSD / USB / memory card', price:'₹800–₹3,500', tag:'' },
+  { name:'Virus Removal', desc:'Full clean + antivirus setup', price:'₹400–₹700', tag:'' },
+];
+
+function renderPricingCards(list) {
+  return list.map(p => `
+    <div class="price-card">
+      <div class="price-name">${p.name}</div>
+      <div class="price-sub">${p.desc}</div>
+      <div class="price-amt">${p.price}</div>
+      ${p.tag ? `<span class="price-tag">${p.tag}</span>` : ''}
+    </div>`).join('');
+}
 
 /* ── LOAD PRICING ── */
 onSnapshot(collection(db, 'pricing'), (snap) => {
   const grid = document.getElementById('pricing-grid');
   if(!grid) return;
-
   if(snap.empty) {
-    grid.innerHTML = '<div style="grid-column:1/-1;padding:48px;text-align:center;color:rgba(255,255,255,0.3);font-size:13px;">Admin panel se service prices add karo</div>';
+    grid.innerHTML = renderPricingCards(defaultPricing);
     return;
   }
-
-  let html = '';
+  const list = [];
   snap.forEach(d => {
     const p = d.data();
-    html += `
-    <div class="price-card">
-      <div class="price-name">${p.name || ''}</div>
-      <div class="price-sub">${p.desc || ''}</div>
-      <div class="price-amt">${p.price || ''}</div>
-      ${p.tag ? `<span class="price-tag">${p.tag}</span>` : ''}
-    </div>`;
+    list.push({ name: p.name||'', desc: p.desc||'', price: p.price||'', tag: p.tag||'' });
   });
-  grid.innerHTML = html;
+  grid.innerHTML = renderPricingCards(list);
 });
 
 /* ── LOAD LAPTOPS (for dropdown modal) ── */
