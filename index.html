@@ -1578,38 +1578,51 @@ const defaultProducts = [
 ];
 
 function renderProductCards(list) {
-  return list.map(p => `
-    <div class="prod-tile">
-      ${p.badge ? `<div class="prod-badge">${p.badge}</div>` : ''}
-      <div class="prod-vis">${getDefaultSVG(p.name)}</div>
-      <div class="prod-name">${p.name}</div>
-      <div class="prod-brand">${p.brand}</div>
+  return list.map(p => {
+    const isLaptop = p.name && p.name.toLowerCase() === 'laptop';
+    return \`
+    <div class="prod-tile" \${isLaptop ? 'onclick="openLaptopModal()"' : ''}>
+      \${p.badge ? \`<div class="prod-badge">\${p.badge}</div>\` : ''}
+      <div class="prod-vis">\${getDefaultSVG(p.name)}</div>
+      <div class="prod-name">\${p.name}</div>
+      <div class="prod-brand">\${p.brand}</div>
       <div class="prod-pricing">
-        <span class="prod-price">${p.price}</span>
-        ${p.oldPrice ? `<span class="prod-old">${p.oldPrice}</span>` : ''}
+        <span class="prod-price">\${p.price}</span>
+        \${p.oldPrice ? \`<span class="prod-old">\${p.oldPrice}</span>\` : ''}
       </div>
-      <button class="prod-btn" onclick="openWA('${p.wa || 'Hi! I need help with ' + p.name}')">Enquire on WhatsApp</button>
-    </div>`).join('');
+      \${isLaptop
+        ? \`<button class="prod-btn" onclick="event.stopPropagation();openLaptopModal()">View Models ↓</button>\`
+        : \`<button class="prod-btn" onclick="openWA('\${p.wa || 'Hi! I need help with ' + p.name}')">Enquire on WhatsApp</button>\`
+      }
+    </div>\`;
+  }).join('');
 }
+
+const laptopStaticCard = {
+  name:'Laptop', brand:'Dell · HP · Lenovo · ASUS',
+  price:'₹18,000+', oldPrice:'', badge:'In Stock',
+  wa:'Hi! I am interested in buying a laptop.'
+};
 
 /* ── LOAD PRODUCTS ── */
 onSnapshot(collection(db, 'products'), (snap) => {
   const grid = document.getElementById('products-grid');
   if(!grid) return;
+
+  let list = [laptopStaticCard];
+
   if(snap.empty) {
-    // Show default static cards
-    grid.innerHTML = renderProductCards(defaultProducts);
-    return;
-  }
-  const list = [];
-  snap.forEach(d => {
-    const p = d.data();
-    list.push({
-      name: p.name||'', brand: p.brand||'', price: p.price||'',
-      oldPrice: p.oldPrice||'', badge: p.badge||'',
-      wa: `Hi! I am interested in ${p.name||'this product'}. Can you share details?`
+    list = list.concat(defaultProducts.filter(p => p.name.toLowerCase() !== 'laptop'));
+  } else {
+    snap.forEach(d => {
+      const p = d.data();
+      list.push({
+        name: p.name||'', brand: p.brand||'', price: p.price||'',
+        oldPrice: p.oldPrice||'', badge: p.badge||'',
+        wa: \`Hi! I am interested in \${p.name||'this product'}. Can you share details?\`
+      });
     });
-  });
+  }
   grid.innerHTML = renderProductCards(list);
 });
 
