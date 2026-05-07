@@ -8,229 +8,144 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'Inter',sans-serif;background:#0a0a0a;color:#fff;min-height:100vh;}
-
-/* LOGIN */
-#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0a0a0a;}
+#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;}
 .login-box{background:#111;border:0.5px solid rgba(255,255,255,0.1);border-radius:20px;padding:48px 40px;width:100%;max-width:380px;text-align:center;}
 .login-logo{font-size:13px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:#2997ff;margin-bottom:8px;}
 .login-title{font-size:24px;font-weight:700;letter-spacing:-0.5px;margin-bottom:32px;}
-.login-input{width:100%;background:rgba(255,255,255,0.05);border:0.5px solid rgba(255,255,255,0.1);border-radius:10px;padding:14px 16px;color:#fff;font-size:14px;font-family:'Inter',sans-serif;outline:none;margin-bottom:12px;transition:border-color 0.2s;}
-.login-input:focus{border-color:rgba(41,151,255,0.5);}
-.login-btn{width:100%;background:#2997ff;color:#fff;border:none;border-radius:10px;padding:14px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background 0.2s;margin-top:8px;}
-.login-btn:hover{background:#1a8aff;}
+.login-input{width:100%;background:rgba(255,255,255,0.05);border:0.5px solid rgba(255,255,255,0.1);border-radius:10px;padding:14px 16px;color:#fff;font-size:14px;font-family:inherit;outline:none;margin-bottom:12px;}
+.login-btn{width:100%;background:#2997ff;color:#fff;border:none;border-radius:10px;padding:14px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:8px;}
 .login-error{color:#ff453a;font-size:12px;margin-top:12px;display:none;}
-
-/* DASHBOARD */
 #dashboard{display:none;}
 .topbar{background:#111;border-bottom:0.5px solid rgba(255,255,255,0.08);padding:0 32px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
-.topbar-brand{font-size:14px;font-weight:700;letter-spacing:-0.3px;}
+.topbar-brand{font-size:14px;font-weight:700;}
 .topbar-brand span{color:#2997ff;}
-.topbar-right{display:flex;align-items:center;gap:16px;}
-.topbar-user{font-size:12px;color:rgba(255,255,255,0.4);}
-.logout-btn{background:rgba(255,255,255,0.06);border:0.5px solid rgba(255,255,255,0.1);color:#fff;padding:6px 14px;border-radius:8px;font-size:12px;cursor:pointer;font-family:'Inter',sans-serif;}
-
+.logout-btn{background:rgba(255,255,255,0.06);border:0.5px solid rgba(255,255,255,0.1);color:#fff;padding:6px 14px;border-radius:8px;font-size:12px;cursor:pointer;font-family:inherit;}
 .main-layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 56px);}
 .sidebar{background:#0d0d0d;border-right:0.5px solid rgba(255,255,255,0.06);padding:24px 0;}
 .sidebar-item{display:flex;align-items:center;gap:10px;padding:11px 24px;font-size:13px;font-weight:500;color:rgba(255,255,255,0.5);cursor:pointer;transition:all 0.15s;border-left:2px solid transparent;}
 .sidebar-item:hover{color:#fff;background:rgba(255,255,255,0.04);}
 .sidebar-item.active{color:#2997ff;border-left-color:#2997ff;background:rgba(41,151,255,0.06);}
-.sidebar-item svg{width:16px;height:16px;flex-shrink:0;}
 .sidebar-section{font-size:10px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.2);padding:16px 24px 8px;}
-
 .content{padding:32px;overflow-y:auto;}
-.page{display:none;}
-.page.active{display:block;}
-
-.page-header{margin-bottom:28px;}
+.page{display:none;}.page.active{display:block;}
 .page-title{font-size:22px;font-weight:700;letter-spacing:-0.5px;margin-bottom:4px;}
-.page-sub{font-size:13px;color:rgba(255,255,255,0.4);}
-
-/* CARDS */
+.page-sub{font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:28px;}
 .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px;}
 .stat-card{background:#111;border:0.5px solid rgba(255,255,255,0.07);border-radius:14px;padding:20px;}
-.stat-card-num{font-size:28px;font-weight:700;letter-spacing:-1px;color:#fff;}
-.stat-card-lbl{font-size:12px;color:rgba(255,255,255,0.4);margin-top:4px;}
-
-/* TABLE */
-.section-card{background:#111;border:0.5px solid rgba(255,255,255,0.07);border-radius:16px;overflow:hidden;margin-bottom:20px;}
-.section-head{padding:18px 24px;border-bottom:0.5px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:space-between;}
-.section-head-title{font-size:14px;font-weight:600;letter-spacing:-0.2px;}
-.add-btn{background:#2997ff;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background 0.2s;}
-.add-btn:hover{background:#1a8aff;}
-
+.stat-num{font-size:28px;font-weight:700;letter-spacing:-1px;}
+.stat-lbl{font-size:12px;color:rgba(255,255,255,0.4);margin-top:4px;}
+.card{background:#111;border:0.5px solid rgba(255,255,255,0.07);border-radius:16px;overflow:hidden;margin-bottom:20px;}
+.card-head{padding:18px 24px;border-bottom:0.5px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:space-between;}
+.card-title{font-size:14px;font-weight:600;}
+.add-btn{background:#2997ff;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;}
 table{width:100%;border-collapse:collapse;}
 th{font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.3);padding:12px 24px;text-align:left;border-bottom:0.5px solid rgba(255,255,255,0.06);}
-td{padding:14px 24px;font-size:13px;color:rgba(255,255,255,0.8);border-bottom:0.5px solid rgba(255,255,255,0.04);}
+td{padding:12px 24px;font-size:13px;color:rgba(255,255,255,0.8);border-bottom:0.5px solid rgba(255,255,255,0.04);}
 tr:last-child td{border-bottom:none;}
-tr:hover td{background:rgba(255,255,255,0.02);}
-
-.badge{display:inline-block;font-size:10px;font-weight:600;padding:3px 8px;border-radius:4px;letter-spacing:0.06em;text-transform:uppercase;}
+.badge{display:inline-block;font-size:10px;font-weight:600;padding:3px 8px;border-radius:4px;text-transform:uppercase;}
 .badge-blue{background:rgba(41,151,255,0.15);color:#2997ff;}
 .badge-green{background:rgba(52,199,89,0.15);color:#34c759;}
-
-/* ACTION BTNS */
-.action-btns{display:flex;gap:8px;}
-.edit-btn{background:rgba(255,255,255,0.06);border:0.5px solid rgba(255,255,255,0.1);color:#fff;padding:5px 12px;border-radius:6px;font-size:11px;cursor:pointer;font-family:'Inter',sans-serif;transition:background 0.15s;}
-.edit-btn:hover{background:rgba(255,255,255,0.1);}
-.del-btn{background:rgba(255,69,58,0.1);border:0.5px solid rgba(255,69,58,0.2);color:#ff453a;padding:5px 12px;border-radius:6px;font-size:11px;cursor:pointer;font-family:'Inter',sans-serif;transition:background 0.15s;}
-.del-btn:hover{background:rgba(255,69,58,0.2);}
-
-/* MODAL */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(10px);z-index:500;align-items:center;justify-content:center;}
-.modal-overlay.open{display:flex;}
-.modal-box{background:#161616;border:0.5px solid rgba(255,255,255,0.1);border-radius:18px;padding:32px;width:100%;max-width:480px;}
-.modal-title{font-size:17px;font-weight:700;letter-spacing:-0.3px;margin-bottom:24px;}
-.form-group{margin-bottom:16px;}
-.form-label{font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:8px;display:block;}
-.form-input{width:100%;background:rgba(255,255,255,0.05);border:0.5px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px 14px;color:#fff;font-size:14px;font-family:'Inter',sans-serif;outline:none;transition:border-color 0.2s;}
-.form-input:focus{border-color:rgba(41,151,255,0.5);}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.modal-btns{display:flex;gap:10px;margin-top:24px;justify-content:flex-end;}
-.modal-cancel{background:rgba(255,255,255,0.06);border:0.5px solid rgba(255,255,255,0.1);color:#fff;padding:10px 20px;border-radius:10px;font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;}
-.modal-save{background:#2997ff;border:none;color:#fff;padding:10px 24px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;}
-.modal-save:hover{background:#1a8aff;}
-
-/* TOAST */
-.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(80px);background:#1c1c1e;border:0.5px solid rgba(255,255,255,0.1);color:#fff;font-size:13px;padding:12px 24px;border-radius:980px;z-index:999;transition:transform 0.3s;white-space:nowrap;font-family:'Inter',sans-serif;}
+.var-count{display:inline-block;background:rgba(52,199,89,0.15);color:#34c759;font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;}
+.btns{display:flex;gap:8px;flex-wrap:wrap;}
+.ebtn{background:rgba(255,255,255,0.06);border:0.5px solid rgba(255,255,255,0.1);color:#fff;padding:5px 10px;border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit;}
+.dbtn{background:rgba(255,69,58,0.1);border:0.5px solid rgba(255,69,58,0.2);color:#ff453a;padding:5px 10px;border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit;}
+.vbtn{background:rgba(52,199,89,0.1);border:0.5px solid rgba(52,199,89,0.25);color:#34c759;padding:5px 10px;border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit;}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);z-index:500;align-items:center;justify-content:center;padding:20px;}
+.overlay.open{display:flex;}
+.mbox{background:#161616;border:0.5px solid rgba(255,255,255,0.1);border-radius:18px;padding:32px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;}
+.mtitle{font-size:17px;font-weight:700;margin-bottom:20px;}
+.flabel{font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:6px;display:block;margin-top:14px;}
+.finput{width:100%;background:rgba(255,255,255,0.05);border:0.5px solid rgba(255,255,255,0.1);border-radius:10px;padding:11px 14px;color:#fff;font-size:14px;font-family:inherit;outline:none;}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.mbtns{display:flex;gap:10px;margin-top:24px;justify-content:flex-end;}
+.mcancelbtn{background:rgba(255,255,255,0.06);border:0.5px solid rgba(255,255,255,0.1);color:#fff;padding:10px 20px;border-radius:10px;font-size:13px;cursor:pointer;font-family:inherit;}
+.msavebtn{background:#2997ff;border:none;color:#fff;padding:10px 24px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;}
+.var-row{display:flex;gap:8px;align-items:center;margin-bottom:8px;}
+.var-row input{flex:1;background:rgba(255,255,255,0.05);border:0.5px solid rgba(255,255,255,0.1);border-radius:8px;padding:9px 12px;color:#fff;font-size:13px;font-family:inherit;outline:none;}
+.rmvbtn{background:rgba(255,69,58,0.15);border:none;color:#ff453a;width:30px;height:30px;border-radius:6px;cursor:pointer;font-size:14px;flex-shrink:0;}
+.addvarbtn{background:rgba(41,151,255,0.1);border:0.5px solid rgba(41,151,255,0.3);color:#2997ff;padding:9px;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;width:100%;margin-top:6px;}
+.empty{padding:40px;text-align:center;color:rgba(255,255,255,0.3);font-size:13px;}
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(80px);background:#1c1c1e;border:0.5px solid rgba(255,255,255,0.1);color:#fff;font-size:13px;padding:12px 24px;border-radius:980px;z-index:999;transition:transform 0.3s;white-space:nowrap;font-family:inherit;}
 .toast.show{transform:translateX(-50%) translateY(0);}
-
-.empty-state{padding:48px 24px;text-align:center;color:rgba(255,255,255,0.3);font-size:13px;}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
 <div id="login-screen">
   <div class="login-box">
     <div class="login-logo">Computer Solution</div>
     <div class="login-title">Admin Panel</div>
-    <input type="text" class="login-input" id="login-user" placeholder="Username" autocomplete="off">
-    <input type="password" class="login-input" id="login-pass" placeholder="Password">
+    <input type="text" class="login-input" id="lu" placeholder="Username">
+    <input type="password" class="login-input" id="lp" placeholder="Password">
     <button class="login-btn" onclick="doLogin()">Login</button>
-    <div class="login-error" id="login-error">Wrong username or password</div>
+    <div class="login-error" id="lerr">Wrong username or password</div>
   </div>
 </div>
 
-<!-- DASHBOARD -->
 <div id="dashboard">
   <div class="topbar">
     <div class="topbar-brand">Computer Solution <span>Admin</span></div>
-    <div class="topbar-right">
-      <span class="topbar-user">Logged in as Admin</span>
+    <div style="display:flex;align-items:center;gap:16px;">
+      <span style="font-size:12px;color:rgba(255,255,255,0.4);">Logged in as Admin</span>
       <button class="logout-btn" onclick="doLogout()">Logout</button>
     </div>
   </div>
   <div class="main-layout">
     <div class="sidebar">
       <div class="sidebar-section">Main</div>
-      <div class="sidebar-item active" onclick="showPage('overview',this)">
-        <svg viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1.5" fill="currentColor" opacity="0.6"/><rect x="9" y="1" width="6" height="6" rx="1.5" fill="currentColor" opacity="0.6"/><rect x="1" y="9" width="6" height="6" rx="1.5" fill="currentColor" opacity="0.6"/><rect x="9" y="9" width="6" height="6" rx="1.5" fill="currentColor" opacity="0.6"/></svg>
-        Overview
-      </div>
+      <div class="sidebar-item active" onclick="showPage('overview',this)">Overview</div>
       <div class="sidebar-section">Products</div>
-      <div class="sidebar-item" onclick="showPage('laptops',this)">
-        <svg viewBox="0 0 16 16" fill="none"><rect x="1" y="2" width="14" height="9" rx="1.5" stroke="currentColor" stroke-width="1.2"/><rect x="0" y="12" width="16" height="2" rx="1" fill="currentColor" opacity="0.5"/></svg>
-        Laptops
-      </div>
-      <div class="sidebar-item" onclick="showPage('products',this)">
-        <svg viewBox="0 0 16 16" fill="none"><path d="M2 2h2l2 6h6l2-6h2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="7" cy="13" r="1" fill="currentColor"/><circle cx="11" cy="13" r="1" fill="currentColor"/></svg>
-        Shop Products
-      </div>
+      <div class="sidebar-item" onclick="showPage('laptops',this)">Laptops</div>
+      <div class="sidebar-item" onclick="showPage('products',this)">Shop Products</div>
       <div class="sidebar-section">Services</div>
-      <div class="sidebar-item" onclick="showPage('pricing',this)">
-        <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.2"/><path d="M8 5v6M6 7h3.5a1.5 1.5 0 010 3H6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-        Service Pricing
-      </div>
+      <div class="sidebar-item" onclick="showPage('pricing',this)">Service Pricing</div>
     </div>
-
     <div class="content">
 
-      <!-- OVERVIEW -->
       <div class="page active" id="page-overview">
-        <div class="page-header">
-          <div class="page-title">Overview</div>
-          <div class="page-sub">Computer Solution Admin Dashboard</div>
-        </div>
+        <div class="page-title">Overview</div>
+        <div class="page-sub">Computer Solution Admin Dashboard</div>
         <div class="stats-row">
-          <div class="stat-card">
-            <div class="stat-card-num" id="stat-laptops">0</div>
-            <div class="stat-card-lbl">Laptop Models</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-card-num" id="stat-products">0</div>
-            <div class="stat-card-lbl">Shop Products</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-card-num" id="stat-pricing">0</div>
-            <div class="stat-card-lbl">Service Prices</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-card-num">Live</div>
-            <div class="stat-card-lbl">Firebase Status</div>
-          </div>
+          <div class="stat-card"><div class="stat-num" id="s-lap">0</div><div class="stat-lbl">Laptop Models</div></div>
+          <div class="stat-card"><div class="stat-num" id="s-prod">0</div><div class="stat-lbl">Shop Products</div></div>
+          <div class="stat-card"><div class="stat-num" id="s-price">0</div><div class="stat-lbl">Service Prices</div></div>
+          <div class="stat-card"><div class="stat-num">Live</div><div class="stat-lbl">Firebase</div></div>
         </div>
-        <div class="section-card">
-          <div class="section-head"><div class="section-head-title">Quick Guide</div></div>
-          <div style="padding:24px;font-size:13px;color:rgba(255,255,255,0.5);line-height:2;">
-            ✅ &nbsp;<strong style="color:#fff;">Laptops</strong> — Har laptop model add karo jisme name, specs, price aur brand hogi<br>
-            ✅ &nbsp;<strong style="color:#fff;">Shop Products</strong> — Mouse, keyboard, SSD etc. ke prices update karo<br>
-            ✅ &nbsp;<strong style="color:#fff;">Service Pricing</strong> — Repair, data recovery etc. ke prices change karo<br>
-            ✅ &nbsp;<strong style="color:#fff;">Changes live</strong> — Jo bhi save karo woh turant website pe dikh jayega
-          </div>
+        <div class="card" style="padding:24px;font-size:13px;color:rgba(255,255,255,0.5);line-height:2.2;">
+          ✅ &nbsp;<strong style="color:#fff;">Laptops</strong> — Laptop models with specs &amp; price<br>
+          ✅ &nbsp;<strong style="color:#fff;">Shop Products</strong> — Har product mein <strong style="color:#34c759;">"Varieties"</strong> button se models add karo<br>
+          ✅ &nbsp;<strong style="color:#fff;">Service Pricing</strong> — Repair prices update karo<br>
+          ✅ &nbsp;<strong style="color:#fff;">Website pe</strong> — Card click karne se dropdown modal khulega
         </div>
       </div>
 
-      <!-- LAPTOPS -->
       <div class="page" id="page-laptops">
-        <div class="page-header">
-          <div class="page-title">Laptop Models</div>
-          <div class="page-sub">Website pe dropdown mein yeh models dikhenge</div>
-        </div>
-        <div class="section-card">
-          <div class="section-head">
-            <div class="section-head-title">All Models</div>
-            <button class="add-btn" onclick="openModal('laptop')">+ Add Laptop</button>
-          </div>
-          <table>
-            <thead><tr><th>Brand</th><th>Model Name</th><th>Specs</th><th>Price</th><th>Status</th><th>Actions</th></tr></thead>
-            <tbody id="laptops-tbody"><tr><td colspan="6" class="empty-state">Loading...</td></tr></tbody>
-          </table>
+        <div class="page-title">Laptop Models</div>
+        <div class="page-sub">Website pe laptop card click karne se yeh models dikhenge</div>
+        <div class="card">
+          <div class="card-head"><div class="card-title">All Models</div><button class="add-btn" onclick="openM('laptop')">+ Add Laptop</button></div>
+          <table><thead><tr><th>Brand</th><th>Model Name</th><th>Specs</th><th>Price</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="lap-tbody"><tr><td colspan="6" class="empty">Loading...</td></tr></tbody></table>
         </div>
       </div>
 
-      <!-- SHOP PRODUCTS -->
       <div class="page" id="page-products">
-        <div class="page-header">
-          <div class="page-title">Shop Products</div>
-          <div class="page-sub">Accessories aur components ke prices aur details</div>
-        </div>
-        <div class="section-card">
-          <div class="section-head">
-            <div class="section-head-title">All Products</div>
-            <button class="add-btn" onclick="openModal('product')">+ Add Product</button>
-          </div>
-          <table>
-            <thead><tr><th>Product Name</th><th>Brand</th><th>Price</th><th>Old Price</th><th>Badge</th><th>Actions</th></tr></thead>
-            <tbody id="products-tbody"><tr><td colspan="6" class="empty-state">Loading...</td></tr></tbody>
-          </table>
+        <div class="page-title">Shop Products</div>
+        <div class="page-sub">Har product ke "Varieties" button se models add karo — website pe dropdown khulega</div>
+        <div class="card">
+          <div class="card-head"><div class="card-title">All Products</div><button class="add-btn" onclick="openM('product')">+ Add Product</button></div>
+          <table><thead><tr><th>Product Name</th><th>Brand</th><th>Price</th><th>Old Price</th><th>Badge</th><th>Varieties</th><th>Actions</th></tr></thead>
+          <tbody id="prod-tbody"><tr><td colspan="7" class="empty">Loading...</td></tr></tbody></table>
         </div>
       </div>
 
-      <!-- PRICING -->
       <div class="page" id="page-pricing">
-        <div class="page-header">
-          <div class="page-title">Service Pricing</div>
-          <div class="page-sub">Repair aur service prices — website pe live update hoga</div>
-        </div>
-        <div class="section-card">
-          <div class="section-head">
-            <div class="section-head-title">All Services</div>
-            <button class="add-btn" onclick="openModal('pricing')">+ Add Service</button>
-          </div>
-          <table>
-            <thead><tr><th>Service Name</th><th>Description</th><th>Price Range</th><th>Actions</th></tr></thead>
-            <tbody id="pricing-tbody"><tr><td colspan="4" class="empty-state">Loading...</td></tr></tbody>
-          </table>
+        <div class="page-title">Service Pricing</div>
+        <div class="page-sub">Repair aur service prices — website pe live update hoga</div>
+        <div class="card">
+          <div class="card-head"><div class="card-title">All Services</div><button class="add-btn" onclick="openM('pricing')">+ Add Service</button></div>
+          <table><thead><tr><th>Service Name</th><th>Description</th><th>Price Range</th><th>Actions</th></tr></thead>
+          <tbody id="price-tbody"><tr><td colspan="4" class="empty">Loading...</td></tr></tbody></table>
         </div>
       </div>
 
@@ -238,271 +153,208 @@ tr:hover td{background:rgba(255,255,255,0.02);}
   </div>
 </div>
 
-<!-- MODAL -->
-<div class="modal-overlay" id="modal">
-  <div class="modal-box">
-    <div class="modal-title" id="modal-title">Add Item</div>
-    <div id="modal-fields"></div>
-    <div class="modal-btns">
-      <button class="modal-cancel" onclick="closeModal()">Cancel</button>
-      <button class="modal-save" onclick="saveModal()">Save</button>
+<!-- MAIN MODAL -->
+<div class="overlay" id="main-modal">
+  <div class="mbox">
+    <div class="mtitle" id="m-title">Add</div>
+    <div id="m-fields"></div>
+    <div class="mbtns">
+      <button class="mcancelbtn" onclick="closeM()">Cancel</button>
+      <button class="msavebtn" onclick="saveM()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- VARIETIES MODAL -->
+<div class="overlay" id="var-modal">
+  <div class="mbox" style="max-width:620px;">
+    <div class="mtitle" id="vm-title">Varieties</div>
+    <p style="font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:20px;">Har variety ek alag model/option — Name, Specs (optional), Price</p>
+    <div id="var-rows"></div>
+    <button class="addvarbtn" onclick="addVarRow('','','')">+ Add Another Variety</button>
+    <div class="mbtns">
+      <button class="mcancelbtn" onclick="closeVM()">Cancel</button>
+      <button class="msavebtn" onclick="saveVars()">Save All Varieties</button>
     </div>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
-<!-- FIREBASE -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBq3CG0IYuZ8cIJWJod4de5lz7S8eaGpIQ",
-  authDomain: "computer-solution-5d8de.firebaseapp.com",
-  projectId: "computer-solution-5d8de",
-  storageBucket: "computer-solution-5d8de.firebasestorage.app",
-  messagingSenderId: "824664461017",
-  appId: "1:824664461017:web:37184546f865a0b74778c8"
+const db = getFirestore(initializeApp({
+  apiKey:"AIzaSyBq3CG0IYuZ8cIJWJod4de5lz7S8eaGpIQ",
+  authDomain:"computer-solution-5d8de.firebaseapp.com",
+  projectId:"computer-solution-5d8de",
+  storageBucket:"computer-solution-5d8de.firebasestorage.app",
+  messagingSenderId:"824664461017",
+  appId:"1:824664461017:web:37184546f865a0b74778c8"
+}));
+
+let laps=[], prods=[], prices=[];
+
+window.doLogin = function(){
+  if(document.getElementById('lu').value==='admin' && document.getElementById('lp').value==='cs2003admin'){
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('dashboard').style.display='block';
+    init();
+  } else { document.getElementById('lerr').style.display='block'; }
 };
+window.doLogout = function(){
+  document.getElementById('dashboard').style.display='none';
+  document.getElementById('login-screen').style.display='flex';
+};
+document.getElementById('lp').onkeydown = function(e){ if(e.key==='Enter') window.doLogin(); };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-// ── AUTH ──
-const ADMIN_USER = "admin";
-const ADMIN_PASS = "cs2003admin";
-
-window.doLogin = function() {
-  const u = document.getElementById('login-user').value;
-  const p = document.getElementById('login-pass').value;
-  if(u === ADMIN_USER && p === ADMIN_PASS) {
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('dashboard').style.display = 'block';
-    loadAll();
-  } else {
-    document.getElementById('login-error').style.display = 'block';
-  }
-}
-
-window.doLogout = function() {
-  document.getElementById('dashboard').style.display = 'none';
-  document.getElementById('login-screen').style.display = 'flex';
-}
-
-document.getElementById('login-pass').addEventListener('keydown', e => {
-  if(e.key === 'Enter') window.doLogin();
-});
-
-// ── NAVIGATION ──
-window.showPage = function(page, el) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.sidebar-item').forEach(s => s.classList.remove('active'));
-  document.getElementById('page-' + page).classList.add('active');
+window.showPage = function(p,el){
+  document.querySelectorAll('.page').forEach(function(x){x.classList.remove('active');});
+  document.querySelectorAll('.sidebar-item').forEach(function(x){x.classList.remove('active');});
+  document.getElementById('page-'+p).classList.add('active');
   el.classList.add('active');
-}
-
-// ── TOAST ──
-function toast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
-}
-
-// ── LOAD ALL ──
-let laptopsData = [], productsData = [], pricingData = [];
-
-async function loadAll() {
-  loadLaptops();
-  loadProducts();
-  loadPricing();
-}
-
-// ── LAPTOPS ──
-async function loadLaptops() {
-  const snap = await getDocs(collection(db, 'laptops'));
-  laptopsData = [];
-  snap.forEach(d => laptopsData.push({id: d.id, ...d.data()}));
-  renderLaptops();
-  document.getElementById('stat-laptops').textContent = laptopsData.length;
-}
-
-function renderLaptops() {
-  const tbody = document.getElementById('laptops-tbody');
-  if(!laptopsData.length) {
-    tbody.innerHTML = '<tr><td colspan="6" class="empty-state">Koi laptop nahi — "+ Add Laptop" se add karo</td></tr>';
-    return;
-  }
-  tbody.innerHTML = laptopsData.map(l => `
-    <tr>
-      <td><span class="badge badge-blue">${l.brand||''}</span></td>
-      <td style="font-weight:500">${l.name||''}</td>
-      <td style="color:rgba(255,255,255,0.5);font-size:12px">${l.specs||''}</td>
-      <td style="color:#2997ff;font-weight:600">${l.price||''}</td>
-      <td><span class="badge badge-green">${l.status||'Available'}</span></td>
-      <td><div class="action-btns">
-        <button class="edit-btn" onclick="editItem('laptop','${l.id}')">Edit</button>
-        <button class="del-btn" onclick="delItem('laptops','${l.id}')">Delete</button>
-      </div></td>
-    </tr>`).join('');
-}
-
-// ── PRODUCTS ──
-async function loadProducts() {
-  const snap = await getDocs(collection(db, 'products'));
-  productsData = [];
-  snap.forEach(d => productsData.push({id: d.id, ...d.data()}));
-  renderProducts();
-  document.getElementById('stat-products').textContent = productsData.length;
-}
-
-function renderProducts() {
-  const tbody = document.getElementById('products-tbody');
-  if(!productsData.length) {
-    tbody.innerHTML = '<tr><td colspan="6" class="empty-state">Koi product nahi — "+ Add Product" se add karo</td></tr>';
-    return;
-  }
-  tbody.innerHTML = productsData.map(p => `
-    <tr>
-      <td style="font-weight:500">${p.name||''}</td>
-      <td style="color:rgba(255,255,255,0.5)">${p.brand||''}</td>
-      <td style="color:#2997ff;font-weight:600">${p.price||''}</td>
-      <td style="color:rgba(255,255,255,0.3);text-decoration:line-through">${p.oldPrice||'-'}</td>
-      <td>${p.badge ? `<span class="badge badge-blue">${p.badge}</span>` : '-'}</td>
-      <td><div class="action-btns">
-        <button class="edit-btn" onclick="editItem('product','${p.id}')">Edit</button>
-        <button class="del-btn" onclick="delItem('products','${p.id}')">Delete</button>
-      </div></td>
-    </tr>`).join('');
-}
-
-// ── PRICING ──
-async function loadPricing() {
-  const snap = await getDocs(collection(db, 'pricing'));
-  pricingData = [];
-  snap.forEach(d => pricingData.push({id: d.id, ...d.data()}));
-  renderPricing();
-  document.getElementById('stat-pricing').textContent = pricingData.length;
-}
-
-function renderPricing() {
-  const tbody = document.getElementById('pricing-tbody');
-  if(!pricingData.length) {
-    tbody.innerHTML = '<tr><td colspan="4" class="empty-state">Koi service nahi — "+ Add Service" se add karo</td></tr>';
-    return;
-  }
-  tbody.innerHTML = pricingData.map(p => `
-    <tr>
-      <td style="font-weight:500">${p.name||''}</td>
-      <td style="color:rgba(255,255,255,0.5);font-size:12px">${p.desc||''}</td>
-      <td style="color:#2997ff;font-weight:600">${p.price||''}</td>
-      <td><div class="action-btns">
-        <button class="edit-btn" onclick="editItem('pricing','${p.id}')">Edit</button>
-        <button class="del-btn" onclick="delItem('pricing','${p.id}')">Delete</button>
-      </div></td>
-    </tr>`).join('');
-}
-
-// ── MODAL ──
-let currentModal = '', currentEditId = '';
-
-const modalFields = {
-  laptop: `
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Brand</label><input class="form-input" id="f-brand" placeholder="Dell / HP / Lenovo"></div>
-      <div class="form-group"><label class="form-label">Status</label><input class="form-input" id="f-status" placeholder="Available / Sold Out"></div>
-    </div>
-    <div class="form-group"><label class="form-label">Model Name</label><input class="form-input" id="f-name" placeholder="e.g. Dell Inspiron 15 3520"></div>
-    <div class="form-group"><label class="form-label">Specs</label><input class="form-input" id="f-specs" placeholder="e.g. i5 12th Gen, 8GB RAM, 512GB SSD, Win11"></div>
-    <div class="form-group"><label class="form-label">Price</label><input class="form-input" id="f-price" placeholder="e.g. ₹42,000"></div>`,
-  product: `
-    <div class="form-group"><label class="form-label">Product Name</label><input class="form-input" id="f-name" placeholder="e.g. Gaming Mouse"></div>
-    <div class="form-group"><label class="form-label">Brand</label><input class="form-input" id="f-brand" placeholder="e.g. Logitech · Redragon"></div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Price</label><input class="form-input" id="f-price" placeholder="e.g. ₹499"></div>
-      <div class="form-group"><label class="form-label">Old Price</label><input class="form-input" id="f-oldprice" placeholder="e.g. ₹900"></div>
-    </div>
-    <div class="form-group"><label class="form-label">Badge (optional)</label><input class="form-input" id="f-badge" placeholder="Hot / New / Sale"></div>`,
-  pricing: `
-    <div class="form-group"><label class="form-label">Service Name</label><input class="form-input" id="f-name" placeholder="e.g. Laptop Screen Replacement"></div>
-    <div class="form-group"><label class="form-label">Description</label><input class="form-input" id="f-desc" placeholder="e.g. Parts + labour, all brands"></div>
-    <div class="form-group"><label class="form-label">Price Range</label><input class="form-input" id="f-price" placeholder="e.g. ₹1,800 – ₹5,500"></div>`
 };
 
-window.openModal = function(type, title) {
-  currentModal = type;
-  currentEditId = '';
-  document.getElementById('modal-title').textContent = 'Add ' + (type === 'laptop' ? 'Laptop Model' : type === 'product' ? 'Product' : 'Service');
-  document.getElementById('modal-fields').innerHTML = modalFields[type];
-  document.getElementById('modal').classList.add('open');
+function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(function(){t.classList.remove('show');},2500); }
+
+function fi(id){ const el=document.getElementById(id); return el ? el.value.trim() : ''; }
+
+function init(){
+  onSnapshot(collection(db,'laptops'), function(s){
+    laps=[];
+    s.forEach(function(d){laps.push({id:d.id,...d.data()});});
+    document.getElementById('s-lap').textContent=laps.length;
+    const tb=document.getElementById('lap-tbody');
+    if(!laps.length){tb.innerHTML='<tr><td colspan="6" class="empty">Koi laptop nahi</td></tr>';return;}
+    tb.innerHTML=laps.map(function(l){
+      return '<tr><td><span class="badge badge-blue">'+(l.brand||'')+'</span></td><td style="font-weight:500">'+(l.name||'')+'</td><td style="color:rgba(255,255,255,0.5);font-size:12px">'+(l.specs||'')+'</td><td style="color:#2997ff;font-weight:600">'+(l.price||'')+'</td><td><span class="badge badge-green">'+(l.status||'Available')+'</span></td><td><div class="btns"><button class="ebtn" onclick="editM(\'laptop\',\''+l.id+'\')">Edit</button><button class="dbtn" onclick="delIt(\'laptops\',\''+l.id+'\')">Delete</button></div></td></tr>';
+    }).join('');
+  });
+
+  onSnapshot(collection(db,'products'), function(s){
+    prods=[];
+    s.forEach(function(d){prods.push({id:d.id,...d.data()});});
+    document.getElementById('s-prod').textContent=prods.length;
+    const tb=document.getElementById('prod-tbody');
+    if(!prods.length){tb.innerHTML='<tr><td colspan="7" class="empty">Koi product nahi</td></tr>';return;}
+    tb.innerHTML=prods.map(function(p){
+      const vars=p.varieties||[];
+      const vc=vars.length>0?'<span class="var-count">'+vars.length+' varieties</span>':'<span style="color:rgba(255,255,255,0.3);font-size:11px;">None</span>';
+      return '<tr><td style="font-weight:500">'+(p.name||'')+'</td><td style="color:rgba(255,255,255,0.5)">'+(p.brand||'')+'</td><td style="color:#2997ff;font-weight:600">'+(p.price||'')+'</td><td style="color:rgba(255,255,255,0.3);text-decoration:line-through">'+(p.oldPrice||'-')+'</td><td>'+(p.badge?'<span class="badge badge-blue">'+p.badge+'</span>':'-')+'</td><td>'+vc+'</td><td><div class="btns"><button class="vbtn" onclick="openVM(\''+p.id+'\',\''+escAttr(p.name||'')+'\')">&#9881; Varieties</button><button class="ebtn" onclick="editM(\'product\',\''+p.id+'\')">Edit</button><button class="dbtn" onclick="delIt(\'products\',\''+p.id+'\')">Delete</button></div></td></tr>';
+    }).join('');
+  });
+
+  onSnapshot(collection(db,'pricing'), function(s){
+    prices=[];
+    s.forEach(function(d){prices.push({id:d.id,...d.data()});});
+    document.getElementById('s-price').textContent=prices.length;
+    const tb=document.getElementById('price-tbody');
+    if(!prices.length){tb.innerHTML='<tr><td colspan="4" class="empty">Koi service nahi</td></tr>';return;}
+    tb.innerHTML=prices.map(function(p){
+      return '<tr><td style="font-weight:500">'+(p.name||'')+'</td><td style="color:rgba(255,255,255,0.5);font-size:12px">'+(p.desc||'')+'</td><td style="color:#2997ff;font-weight:600">'+(p.price||'')+'</td><td><div class="btns"><button class="ebtn" onclick="editM(\'pricing\',\''+p.id+'\')">Edit</button><button class="dbtn" onclick="delIt(\'pricing\',\''+p.id+'\')">Delete</button></div></td></tr>';
+    }).join('');
+  });
 }
 
-window.editItem = function(type, id) {
-  currentModal = type;
-  currentEditId = id;
-  document.getElementById('modal-title').textContent = 'Edit ' + (type === 'laptop' ? 'Laptop' : type === 'product' ? 'Product' : 'Service');
-  document.getElementById('modal-fields').innerHTML = modalFields[type];
-  
-  let item;
-  if(type === 'laptop') item = laptopsData.find(l => l.id === id);
-  else if(type === 'product') item = productsData.find(p => p.id === id);
-  else item = pricingData.find(p => p.id === id);
+function escAttr(s){ return s.replace(/'/g,"&apos;").replace(/"/g,"&quot;"); }
 
-  if(item) {
-    if(document.getElementById('f-name')) document.getElementById('f-name').value = item.name||'';
-    if(document.getElementById('f-brand')) document.getElementById('f-brand').value = item.brand||'';
-    if(document.getElementById('f-price')) document.getElementById('f-price').value = item.price||'';
-    if(document.getElementById('f-specs')) document.getElementById('f-specs').value = item.specs||'';
-    if(document.getElementById('f-status')) document.getElementById('f-status').value = item.status||'';
-    if(document.getElementById('f-oldprice')) document.getElementById('f-oldprice').value = item.oldPrice||'';
-    if(document.getElementById('f-badge')) document.getElementById('f-badge').value = item.badge||'';
-    if(document.getElementById('f-desc')) document.getElementById('f-desc').value = item.desc||'';
+// ── MAIN MODAL ──
+let cType='', cId='';
+
+function getFields(type){
+  if(type==='laptop') return '<label class="flabel">Brand</label><input class="finput" id="f-brand" placeholder="Dell / HP / Lenovo"><label class="flabel">Model Name</label><input class="finput" id="f-name" placeholder="e.g. Dell Inspiron 15 3520"><label class="flabel">Specs</label><input class="finput" id="f-specs" placeholder="e.g. i5 12th Gen, 8GB RAM, 512GB SSD"><div class="frow"><div><label class="flabel">Price</label><input class="finput" id="f-price" placeholder="e.g. &#8377;42,000"></div><div><label class="flabel">Status</label><input class="finput" id="f-status" placeholder="Available / Sold Out"></div></div>';
+  if(type==='product') return '<label class="flabel">Product Name</label><input class="finput" id="f-name" placeholder="e.g. Gaming Mouse"><label class="flabel">Brand</label><input class="finput" id="f-brand" placeholder="e.g. Logitech &middot; Redragon"><div class="frow"><div><label class="flabel">Starting Price</label><input class="finput" id="f-price" placeholder="e.g. &#8377;499"></div><div><label class="flabel">Old Price</label><input class="finput" id="f-oldprice" placeholder="e.g. &#8377;900"></div></div><label class="flabel">Badge (optional)</label><input class="finput" id="f-badge" placeholder="Hot / New / Sale">';
+  if(type==='pricing') return '<label class="flabel">Service Name</label><input class="finput" id="f-name" placeholder="e.g. Laptop Screen Replacement"><label class="flabel">Description</label><input class="finput" id="f-desc" placeholder="e.g. Parts + labour, all brands"><label class="flabel">Price Range</label><input class="finput" id="f-price" placeholder="e.g. &#8377;1,800 - &#8377;5,500">';
+  return '';
+}
+
+window.openM = function(type){
+  cType=type; cId='';
+  document.getElementById('m-title').textContent = type==='laptop'?'Add Laptop Model':type==='product'?'Add Product':'Add Service';
+  document.getElementById('m-fields').innerHTML = getFields(type);
+  document.getElementById('main-modal').classList.add('open');
+};
+
+window.editM = function(type, id){
+  cType=type; cId=id;
+  document.getElementById('m-title').textContent = type==='laptop'?'Edit Laptop':type==='product'?'Edit Product':'Edit Service';
+  document.getElementById('m-fields').innerHTML = getFields(type);
+  let item = type==='laptop'?laps.find(function(x){return x.id===id;}):type==='product'?prods.find(function(x){return x.id===id;}):prices.find(function(x){return x.id===id;});
+  if(item){
+    ['name','brand','price','specs','status','oldprice','badge','desc'].forEach(function(k){
+      const el=document.getElementById('f-'+k);
+      if(el) el.value=item[k==='oldprice'?'oldPrice':k]||'';
+    });
   }
-  document.getElementById('modal').classList.add('open');
-}
+  document.getElementById('main-modal').classList.add('open');
+};
 
-window.closeModal = function() {
-  document.getElementById('modal').classList.remove('open');
-}
+window.closeM = function(){ document.getElementById('main-modal').classList.remove('open'); };
 
-window.saveModal = async function() {
-  let data = {};
-  const n = v => document.getElementById(v) ? document.getElementById(v).value.trim() : '';
-
-  if(currentModal === 'laptop') {
-    data = { brand: n('f-brand'), name: n('f-name'), specs: n('f-specs'), price: n('f-price'), status: n('f-status')||'Available' };
-    if(!data.name) { toast('Model name daalo!'); return; }
-    if(currentEditId) await updateDoc(doc(db, 'laptops', currentEditId), data);
-    else await addDoc(collection(db, 'laptops'), data);
-    loadLaptops();
-  } else if(currentModal === 'product') {
-    data = { name: n('f-name'), brand: n('f-brand'), price: n('f-price'), oldPrice: n('f-oldprice'), badge: n('f-badge') };
-    if(!data.name) { toast('Product name daalo!'); return; }
-    if(currentEditId) await updateDoc(doc(db, 'products', currentEditId), data);
-    else await addDoc(collection(db, 'products'), data);
-    loadProducts();
-  } else if(currentModal === 'pricing') {
-    data = { name: n('f-name'), desc: n('f-desc'), price: n('f-price') };
-    if(!data.name) { toast('Service name daalo!'); return; }
-    if(currentEditId) await updateDoc(doc(db, 'pricing', currentEditId), data);
-    else await addDoc(collection(db, 'pricing'), data);
-    loadPricing();
+window.saveM = async function(){
+  let data={};
+  if(cType==='laptop'){
+    data={brand:fi('f-brand'),name:fi('f-name'),specs:fi('f-specs'),price:fi('f-price'),status:fi('f-status')||'Available'};
+    if(!data.name){toast('Model name daalo!');return;}
+    cId ? await updateDoc(doc(db,'laptops',cId),data) : await addDoc(collection(db,'laptops'),data);
+  } else if(cType==='product'){
+    data={name:fi('f-name'),brand:fi('f-brand'),price:fi('f-price'),oldPrice:fi('f-oldprice'),badge:fi('f-badge')};
+    if(!data.name){toast('Product name daalo!');return;}
+    cId ? await updateDoc(doc(db,'products',cId),data) : await addDoc(collection(db,'products'),data);
+  } else if(cType==='pricing'){
+    data={name:fi('f-name'),desc:fi('f-desc'),price:fi('f-price')};
+    if(!data.name){toast('Service name daalo!');return;}
+    cId ? await updateDoc(doc(db,'pricing',cId),data) : await addDoc(collection(db,'pricing'),data);
   }
+  closeM();
+  toast('Saved! Website pe live ho gaya');
+};
 
-  closeModal();
-  toast('✅ Saved! Website pe live ho gaya');
-}
-
-window.delItem = async function(colName, id) {
+window.delIt = async function(col,id){
   if(!confirm('Delete karna chahte ho?')) return;
-  await deleteDoc(doc(db, colName, id));
-  if(colName === 'laptops') loadLaptops();
-  else if(colName === 'products') loadProducts();
-  else loadPricing();
-  toast('Deleted successfully');
-}
+  await deleteDoc(doc(db,col,id));
+  toast('Deleted!');
+};
 
+// ── VARIETIES MODAL ──
+let cvProdId='';
+
+window.openVM = function(prodId, prodName){
+  cvProdId=prodId;
+  document.getElementById('vm-title').textContent=prodName+' — Varieties';
+  const prod=prods.find(function(p){return p.id===prodId;});
+  const vars=(prod&&prod.varieties)||[];
+  document.getElementById('var-rows').innerHTML='';
+  if(vars.length===0){ addVarRow('','',''); }
+  else { vars.forEach(function(v){ addVarRow(v.name||'',v.specs||'',v.price||''); }); }
+  document.getElementById('var-modal').classList.add('open');
+};
+
+window.closeVM = function(){ document.getElementById('var-modal').classList.remove('open'); };
+
+window.addVarRow = function(name,specs,price){
+  const c=document.getElementById('var-rows');
+  const d=document.createElement('div');
+  d.className='var-row';
+  d.innerHTML='<input placeholder="Name (e.g. Logitech G102)" value="'+escAttr(name)+'" class="vn"><input placeholder="Specs (optional, e.g. 7200 DPI)" value="'+escAttr(specs)+'" class="vs"><input placeholder="Price (e.g. &#8377;799)" value="'+escAttr(price)+'" class="vp"><button class="rmvbtn" onclick="this.parentElement.remove()">&#10005;</button>';
+  c.appendChild(d);
+};
+
+window.saveVars = async function(){
+  const rows=document.querySelectorAll('#var-rows .var-row');
+  const vars=[];
+  rows.forEach(function(r){
+    const n=r.querySelector('.vn').value.trim();
+    const s=r.querySelector('.vs').value.trim();
+    const p=r.querySelector('.vp').value.trim();
+    if(n) vars.push({name:n,specs:s,price:p});
+  });
+  if(!cvProdId){toast('Error!');return;}
+  await updateDoc(doc(db,'products',cvProdId),{varieties:vars});
+  closeVM();
+  toast(vars.length+' varieties saved! Website pe live!');
+};
 </script>
 </body>
 </html>
